@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Timers - Word Arena</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .header { background-color: #4B0082; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #3a0066; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
+        .visitor-card { border-bottom: 1px solid #eee; padding: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+        <div class="header">
+            <h2>Register a First Timer</h2>
+        </div>
+
+        <form>
+            <label>First Name</label>
+            <input type="text" placeholder="e.g. John">
+            
+            <label>Last Name</label>
+            <input type="text" placeholder="e.g. Doe">
+
+            <label>Phone Number (WhatsApp)</label>
+            <input type="tel" placeholder="e.g. 0241234567">
+
+            <label>Invited By</label>
+            <input type="text" placeholder="Member's name">
+
+            <label>Follow-up Status</label>
+            <select>
+                <option>Pending</option>
+                <option>Contacted</option>
+                <option>Visited</option>
+                <option>Completed</option>
+            </select>
+
+            <button type="button">Save Visitor (Coming Soon)</button>
+        </form>
+    </div>
+
+</body>
+</html>
