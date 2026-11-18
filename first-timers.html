@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First Timers - Word Arena</title>
+    <!-- This line connects your site to Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
         .header { background-color: #4B0082; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
@@ -12,7 +14,6 @@
         button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; }
         button:hover { background-color: #3a0066; }
         .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
-        .visitor-card { border-bottom: 1px solid #eee; padding: 10px 0; }
     </style>
 </head>
 <body>
@@ -23,30 +24,83 @@
             <h2>Register a First Timer</h2>
         </div>
 
-        <form>
+        <form id="visitorForm">
             <label>First Name</label>
-            <input type="text" placeholder="e.g. John">
+            <input type="text" id="firstName" required>
             
             <label>Last Name</label>
-            <input type="text" placeholder="e.g. Doe">
+            <input type="text" id="lastName" required>
 
             <label>Phone Number (WhatsApp)</label>
-            <input type="tel" placeholder="e.g. 0241234567">
+            <input type="tel" id="phone" required>
 
             <label>Invited By</label>
-            <input type="text" placeholder="Member's name">
+            <input type="text" id="invitedBy">
 
             <label>Follow-up Status</label>
-            <select>
-                <option>Pending</option>
-                <option>Contacted</option>
-                <option>Visited</option>
-                <option>Completed</option>
+            <select id="status">
+                <option value="Pending">Pending</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Visited">Visited</option>
+                <option value="Completed">Completed</option>
             </select>
 
-            <button type="button">Save Visitor (Coming Soon)</button>
+            <button type="submit" id="submitBtn">Save Visitor</button>
         </form>
+        <p id="message" style="color: green; font-weight: bold; text-align: center;"></p>
     </div>
 
+    <script>
+        // --- 1. PASTE YOUR SUPABASE KEYS HERE ---
+        const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co/rest/v1/';
+        const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
+
+        // Initialize Supabase
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- 2. HANDLE FORM SUBMISSION ---
+        document.getElementById('visitorForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Stop page from reloading
+
+            const submitBtn = document.getElementById('submitBtn');
+            const message = document.getElementById('message');
+            
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
+
+            // Gather data from the form
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const phone = document.getElementById('phone').value;
+            const invitedBy = document.getElementById('invitedBy').value;
+            const status = document.getElementById('status').value;
+
+            // Send to Supabase
+            const { data, error } = await supabaseClient
+                .from('first_timers')
+                .insert([
+                    { 
+                        first_name: firstName, 
+                        last_name: lastName, 
+                        phone: phone, 
+                        invited_by: invitedBy, 
+                        status: status 
+                    }
+                ]);
+
+            if (error) {
+                console.error(error);
+                message.textContent = 'Error saving visitor. Please try again.';
+                message.style.color = 'red';
+            } else {
+                message.textContent = 'Visitor saved successfully!';
+                message.style.color = 'green';
+                document.getElementById('visitorForm').reset(); // Clear the form
+            }
+
+            submitBtn.textContent = 'Save Visitor';
+            submitBtn.disabled = false;
+        });
+    </script>
 </body>
 </html>
