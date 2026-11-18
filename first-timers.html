@@ -8,11 +8,17 @@
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
         .header { background-color: #4B0082; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
         input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; }
         button:hover { background-color: #3a0066; }
         .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
+        
+        /* Styles for the visitor list */
+        .visitor-item { border-bottom: 1px solid #ddd; padding: 15px 0; }
+        .visitor-name { font-weight: bold; font-size: 18px; color: #4B0082; margin-bottom: 5px; }
+        .visitor-details { font-size: 14px; color: #555; margin-bottom: 5px; }
+        .status-badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; background-color: #FFD700; color: #333; }
     </style>
 </head>
 <body>
@@ -49,6 +55,14 @@
         <p id="message" style="color: green; font-weight: bold; text-align: center;"></p>
     </div>
 
+    <!-- NEW SECTION: The Visitor List -->
+    <div class="container">
+        <h3>Recent First Timers</h3>
+        <div id="visitorList">
+            <p>Loading visitors...</p>
+        </div>
+    </div>
+
     <script>
         // --- REPLACE THESE WITH YOUR ACTUAL KEYS ---
         const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
@@ -56,6 +70,43 @@
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // --- 1. FUNCTION TO LOAD VISITORS ---
+        async function loadVisitors() {
+            const listContainer = document.getElementById('visitorList');
+            
+            // Get data from Supabase
+            const { data, error } = await supabaseClient
+                .from('first_timers')
+                .select('*')
+                .order('created_at', { ascending: false }); // Newest first
+
+            if (error) {
+                listContainer.innerHTML = '<p style="color: red;">Error loading visitors.</p>';
+                console.error(error);
+                return;
+            }
+
+            if (data.length === 0) {
+                listContainer.innerHTML = '<p>No first timers registered yet.</p>';
+                return;
+            }
+
+            // Build the HTML for the list
+            listContainer.innerHTML = ''; 
+            data.forEach(visitor => {
+                const div = document.createElement('div');
+                div.className = 'visitor-item';
+                div.innerHTML = `
+                    <div class="visitor-name">${visitor.first_name} ${visitor.last_name}</div>
+                    <div class="visitor-details">📞 ${visitor.phone}</div>
+                    <div class="visitor-details">Invited by: ${visitor.invited_by || 'Unknown'}</div>
+                    <span class="status-badge">${visitor.status}</span>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        // --- 2. HANDLE FORM SUBMISSION ---
         document.getElementById('visitorForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
 
@@ -85,17 +136,24 @@
 
             if (error) {
                 console.error(error);
-                message.textContent = 'Error saving visitor. Check console.';
+                message.textContent = 'Error saving visitor.';
                 message.style.color = 'red';
             } else {
                 message.textContent = 'Visitor saved successfully!';
                 message.style.color = 'green';
                 document.getElementById('visitorForm').reset(); 
+                
+                // Refresh the list to show the new visitor!
+                loadVisitors(); 
             }
 
             submitBtn.textContent = 'Save Visitor';
             submitBtn.disabled = false;
         });
+
+        // --- 3. LOAD LIST WHEN PAGE OPENS ---
+        loadVisitors();
+
     </script>
 </body>
 </html>
