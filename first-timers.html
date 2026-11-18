@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First Timers - Word Arena</title>
-    <!-- This line connects your site to Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
@@ -51,16 +50,14 @@
     </div>
 
     <script>
-        // --- 1. PASTE YOUR SUPABASE KEYS HERE ---
+        // --- REPLACE THESE WITH YOUR ACTUAL KEYS ---
         const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co/rest/v1/';
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
 
-        // Initialize Supabase
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // --- 2. HANDLE FORM SUBMISSION ---
         document.getElementById('visitorForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Stop page from reloading
+            e.preventDefault(); 
 
             const submitBtn = document.getElementById('submitBtn');
             const message = document.getElementById('message');
@@ -68,14 +65,12 @@
             submitBtn.textContent = 'Saving...';
             submitBtn.disabled = true;
 
-            // Gather data from the form
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const phone = document.getElementById('phone').value;
             const invitedBy = document.getElementById('invitedBy').value;
             const status = document.getElementById('status').value;
 
-            // Send to Supabase
             const { data, error } = await supabaseClient
                 .from('first_timers')
                 .insert([
@@ -90,12 +85,12 @@
 
             if (error) {
                 console.error(error);
-                message.textContent = 'Error saving visitor. Please try again.';
+                message.textContent = 'Error saving visitor. Check console.';
                 message.style.color = 'red';
             } else {
                 message.textContent = 'Visitor saved successfully!';
                 message.style.color = 'green';
-                document.getElementById('visitorForm').reset(); // Clear the form
+                document.getElementById('visitorForm').reset(); 
             }
 
             submitBtn.textContent = 'Save Visitor';
