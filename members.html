@@ -1,9 +1,152 @@
 <!DOCTYPE html>
-<html>
-<head><title>Members</title></head>
-<body style="font-family: Arial; padding: 20px;">
-    <a href="index.html">← Back to Dashboard</a>
-    <h2>Church Members</h2>
-    <p>Member directory coming soon.</p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members - Word Arena</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .header { background-color: #4B0082; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #3a0066; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
+        
+        .member-item { border-bottom: 1px solid #ddd; padding: 15px 0; }
+        .member-name { font-weight: bold; font-size: 18px; color: #4B0082; margin-bottom: 5px; }
+        .member-details { font-size: 14px; color: #555; margin-bottom: 5px; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .badge-leader { background-color: #E6E6FA; color: #4B0082; }
+        .badge-active { background-color: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+        <div class="header">
+            <h2>Register a Church Member</h2>
+        </div>
+
+        <form id="memberForm">
+            <label>First Name</label>
+            <input type="text" id="firstName" required>
+            
+            <label>Last Name</label>
+            <input type="text" id="lastName" required>
+
+            <label>Phone Number</label>
+            <input type="tel" id="phone" required>
+
+            <label>Email (Optional)</label>
+            <input type="email" id="email">
+
+            <label>Assign to Leader</label>
+            <input type="text" id="leader" placeholder="e.g. Leader Samuel" required>
+
+            <button type="submit" id="submitBtn">Save Member</button>
+        </form>
+        <p id="message" style="color: green; font-weight: bold; text-align: center;"></p>
+    </div>
+
+    <div class="container">
+        <h3>Church Members</h3>
+        <div id="memberList">
+            <p>Loading members...</p>
+        </div>
+    </div>
+
+    <script>
+        // Your keys from the previous page
+        const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
+
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- 1. LOAD MEMBERS ---
+        async function loadMembers() {
+            const listContainer = document.getElementById('memberList');
+            
+            const { data, error } = await supabaseClient
+                .from('members')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                listContainer.innerHTML = '<p style="color: red;">Error loading members.</p>';
+                console.error(error);
+                return;
+            }
+
+            if (data.length === 0) {
+                listContainer.innerHTML = '<p>No members registered yet.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = ''; 
+            data.forEach(member => {
+                const div = document.createElement('div');
+                div.className = 'member-item';
+                div.innerHTML = `
+                    <div class="member-name">${member.first_name} ${member.last_name}</div>
+                    <div class="member-details">📞 ${member.phone} ${member.email ? '| ✉️ ' + member.email : ''}</div>
+                    <div style="margin-top: 8px;">
+                        <span class="badge badge-leader">Leader: ${member.assigned_leader}</span>
+                        <span class="badge badge-active">${member.status}</span>
+                    </div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        // --- 2. SAVE NEW MEMBER ---
+        document.getElementById('memberForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+
+            const submitBtn = document.getElementById('submitBtn');
+            const message = document.getElementById('message');
+            
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const leader = document.getElementById('leader').value;
+
+            const { data, error } = await supabaseClient
+                .from('members')
+                .insert([
+                    { 
+                        first_name: firstName, 
+                        last_name: lastName, 
+                        phone: phone, 
+                        email: email, 
+                        assigned_leader: leader,
+                        status: 'Active'
+                    }
+                ]);
+
+            if (error) {
+                console.error(error);
+                message.textContent = 'Error saving member.';
+                message.style.color = 'red';
+            } else {
+                message.textContent = 'Member saved successfully!';
+                message.style.color = 'green';
+                document.getElementById('memberForm').reset(); 
+                loadMembers(); 
+            }
+
+            submitBtn.textContent = 'Save Member';
+            submitBtn.disabled = false;
+        });
+
+        // Load the list when the page opens
+        loadMembers();
+    </script>
 </body>
 </html>
