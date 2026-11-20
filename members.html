@@ -58,17 +58,28 @@
         </div>
     </div>
 
-    <script>
-        // Your keys from the previous page
+        <script>
+        // Your keys
         const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
-
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // --- 1. LOAD MEMBERS ---
+        // --- SECURITY CHECK ---
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html'; // Kick them out if not logged in
+                return false;
+            }
+            return true;
+        }
+
+        // --- LOAD MEMBERS ---
         async function loadMembers() {
+            // Only load if they are logged in
+            if (!await checkAuth()) return;
+
             const listContainer = document.getElementById('memberList');
-            
             const { data, error } = await supabaseClient
                 .from('members')
                 .select('*')
@@ -76,7 +87,6 @@
 
             if (error) {
                 listContainer.innerHTML = '<p style="color: red;">Error loading members.</p>';
-                console.error(error);
                 return;
             }
 
@@ -91,19 +101,19 @@
                 div.className = 'member-item';
                 div.innerHTML = `
                     <div class="member-name">${member.first_name} ${member.last_name}</div>
-                    <div class="member-details">📞 ${member.phone} ${member.email ? '| ✉️ ' + member.email : ''}</div>
+                    <div class="member-details">📞 ${member.phone}</div>
                     <div style="margin-top: 8px;">
                         <span class="badge badge-leader">Leader: ${member.assigned_leader}</span>
-                        <span class="badge badge-active">${member.status}</span>
                     </div>
                 `;
                 listContainer.appendChild(div);
             });
         }
 
-        // --- 2. SAVE NEW MEMBER ---
+        // --- SAVE NEW MEMBER ---
         document.getElementById('memberForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
+            if (!await checkAuth()) return; // Check security before saving
 
             const submitBtn = document.getElementById('submitBtn');
             const message = document.getElementById('message');
@@ -119,19 +129,16 @@
 
             const { data, error } = await supabaseClient
                 .from('members')
-                .insert([
-                    { 
-                        first_name: firstName, 
-                        last_name: lastName, 
-                        phone: phone, 
-                        email: email, 
-                        assigned_leader: leader,
-                        status: 'Active'
-                    }
-                ]);
+                .insert([{ 
+                    first_name: firstName, 
+                    last_name: lastName, 
+                    phone: phone, 
+                    email: email, 
+                    assigned_leader: leader,
+                    status: 'Active'
+                }]);
 
             if (error) {
-                console.error(error);
                 message.textContent = 'Error saving member.';
                 message.style.color = 'red';
             } else {
@@ -145,22 +152,8 @@
             submitBtn.disabled = false;
         });
 
-        // Load the list when the page opens
+        // Start loading
         loadMembers();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function checkAuth() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) {
-            window.location.href = 'login.html';
-        }
-    }
-    checkAuth();
-</script>
 </body>
 </html>
