@@ -68,7 +68,8 @@
     <div class="header">
         <h1>Arena of The Word Chapel</h1>
         <p>Word Arena Connect Dashboard</p>
-    </div>
+    </div><br>
+<button onclick="logout()" style="background-color: #d9534f; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px;">Logout</button>
 
     <div class="container">
         <h3>Welcome, Pastor / Leader</h3>
@@ -100,5 +101,27 @@
 </a></div>
     </div>
 
-</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function checkAuth() {
+        // Check if there is a logged-in user
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        
+        if (!session) {
+            // If no user is logged in, kick them to the login page
+            window.location.href = 'login.html';
+        }
+    }
+    
+    // Run the check when the page loads
+    checkAuth();
+    async function logout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'login.html';
+}
+</script></body>
 </html>
