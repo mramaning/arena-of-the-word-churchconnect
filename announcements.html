@@ -4,42 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Announcements - Word Arena</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
         .header { background-color: #4B0082; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        a { color: #4B0082; font-weight: bold; text-decoration: none; }
-        button { background-color: #4B0082; color: white; padding: 10px; border: none; border-radius: 5px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; height: 100px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input, textarea, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: Arial, sans-serif; }
+        textarea { height: 100px; resize: vertical; }
+        button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #3a0066; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
+        
+        .announcement-card { border-left: 5px solid #FFD700; background: #fafafa; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .announcement-title { font-size: 18px; font-weight: bold; color: #4B0082; margin-bottom: 5px; }
+        .announcement-meta { font-size: 12px; color: #777; margin-bottom: 10px; }
+        .announcement-body { font-size: 15px; color: #333; line-height: 1.5; white-space: pre-wrap; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <a href="index.html">← Back to Dashboard</a>
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
         <div class="header">
             <h2>Church Announcements</h2>
         </div>
-        
-        <p>Only the Pastor will be able to post here. For now, this is a preview of what it will look like:</p>
-        
-        <label>New Announcement</label>
-        <textarea placeholder="Type your sermon note or announcement here..."></textarea>
-        <button type="button">Publish Announcement (Coming Soon)</button>
-    </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function checkAuth() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) {
-            window.location.href = 'login.html';
+        <form id="announcementForm">
+            <label>Title</label>
+            <input type="text" id="title" placeholder="e.g. Sunday Service Theme" required>
+
+            <label>Message</label>
+            <textarea id="message" placeholder="Type your message here..." required></textarea>
+
+            <button type="submit" id="submitBtn">Publish Announcement</button>
+        </form>
+        <p id="statusMessage" style="color: green; font-weight: bold; text-align: center;"></p>
+    </div>
+
+    <div class="container">
+        <h3>Recent Announcements</h3>
+        <div id="announcementsList">
+            <p>Loading announcements...</p>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- SECURITY CHECK ---
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
         }
-    }
-    checkAuth();
-</script>
+
+        // --- LOAD ANNOUNCEMENTS ---
+        async function loadAnnouncements() {
+            if (!await checkAuth()) return;
+
+            const listContainer = document.getElementById('announcementsList');
+            
+            const { data, error } = await supabaseClient
+                .from('announcements')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                listContainer.innerHTML = '<p style="color: red;">Error loading announcements.</p>';
+                return;
+            }
+
+            if (data.length === 0) {
+                listContainer.innerHTML = '<p>No announcements yet.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = ''; 
+            data.forEach(item => {
+                // Format the date nicely
+                const date = new Date(item.created_at).toLocaleDateString('en-GB', { 
+                    weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' 
+                });
+
+                const div = document.createElement('div');
+                div.className = 'announcement-card';
+                div.innerHTML = `
+                    <div class="announcement-title">${item.title}</div>
+                    <div class="announcement-meta">Posted by ${item.author} on ${date}</div>
+                    <div class="announcement-body">${item.message}</div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        // --- PUBLISH NEW ANNOUNCEMENT ---
+        document.getElementById('announcementForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            if (!await checkAuth()) return;
+
+            const submitBtn = document.getElementById('submitBtn');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            submitBtn.textContent = 'Publishing...';
+            submitBtn.disabled = true;
+
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value;
+
+            const { error } = await supabaseClient
+                .from('announcements')
+                .insert([{ 
+                    title: title, 
+                    message: message, 
+                    author: 'Pastor' // We will make this dynamic later!
+                }]);
+
+            if (error) {
+                console.error(error);
+                statusMessage.textContent = 'Error publishing announcement.';
+                statusMessage.style.color = 'red';
+            } else {
+                statusMessage.textContent = 'Announcement published successfully!';
+                statusMessage.style.color = 'green';
+                document.getElementById('announcementForm').reset(); 
+                loadAnnouncements(); // Refresh the list
+            }
+
+            submitBtn.textContent = 'Publish Announcement';
+            submitBtn.disabled = false;
+        });
+
+        // Load when page opens
+        loadAnnouncements();
+    </script>
 </body>
 </html>
