@@ -106,7 +106,7 @@
     const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
     async function checkAuth() {
         // Check if there is a logged-in user
         const { data: { session } } = await supabaseClient.auth.getSession();
