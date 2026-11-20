@@ -13,11 +13,7 @@
         button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; font-size: 16px; padding: 15px; }
         button:hover { background-color: #3a0066; }
         .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
-        
         .member-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
-        .member-info { flex: 1; }
-        .member-name { font-weight: bold; color: #333; }
-        .member-leader { font-size: 12px; color: #777; }
         .status-select { width: 120px; margin: 0; padding: 8px; }
         .flex-row { display: flex; gap: 10px; }
         .flex-row > div { flex: 1; }
@@ -59,13 +55,23 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let churchMembers = []; // Store members here for saving later
-
-        // Set today's date automatically
+        let churchMembers = []; 
         document.getElementById('serviceDate').valueAsDate = new Date();
 
-        // --- 1. LOAD MEMBERS ---
+        // --- SECURITY CHECK ---
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html'; // Kick them out
+                return false;
+            }
+            return true;
+        }
+
+        // --- LOAD MEMBERS ---
         async function loadMembers() {
+            if (!await checkAuth()) return; // Check security first
+
             const container = document.getElementById('membersContainer');
             
             const { data, error } = await supabaseClient
@@ -79,17 +85,16 @@
                 return;
             }
 
-            churchMembers = data; // Save to global variable
+            churchMembers = data; 
             container.innerHTML = ''; 
 
-            // Create a row for each member
             data.forEach(member => {
                 const div = document.createElement('div');
                 div.className = 'member-row';
                 div.innerHTML = `
-                    <div class="member-info">
-                        <div class="member-name">${member.first_name} ${member.last_name}</div>
-                        <div class="member-leader">Leader: ${member.assigned_leader}</div>
+                    <div>
+                        <div style="font-weight: bold; color: #333;">${member.first_name} ${member.last_name}</div>
+                        <div style="font-size: 12px; color: #777;">Leader: ${member.assigned_leader}</div>
                     </div>
                     <select class="status-select" id="status-${member.id}">
                         <option value="Present">Present</option>
@@ -101,8 +106,10 @@
             });
         }
 
-        // --- 2. SAVE ATTENDANCE ---
+        // --- SAVE ATTENDANCE ---
         async function saveAttendance() {
+            if (!await checkAuth()) return; // Check security first
+
             const date = document.getElementById('serviceDate').value;
             const service = document.getElementById('serviceName').value;
             const message = document.getElementById('message');
@@ -116,7 +123,6 @@
             saveBtn.textContent = 'Saving...';
             saveBtn.disabled = true;
 
-            // Loop through all members and build a list of records to save
             const recordsToSave = churchMembers.map(member => {
                 const status = document.getElementById(`status-${member.id}`).value;
                 return {
@@ -129,7 +135,6 @@
                 };
             });
 
-            // Send all records to Supabase at once
             const { data, error } = await supabaseClient
                 .from('attendance')
                 .insert(recordsToSave);
@@ -139,7 +144,7 @@
                 message.textContent = 'Error saving attendance.';
                 message.style.color = 'red';
             } else {
-                message.textContent = `Attendance for ${service} on ${date} saved successfully!`;
+                message.textContent = `Attendance saved successfully!`;
                 message.style.color = 'green';
             }
 
@@ -147,22 +152,7 @@
             saveBtn.disabled = false;
         }
 
-        // Load members when page opens
         loadMembers();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function checkAuth() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) {
-            window.location.href = 'login.html';
-        }
-    }
-    checkAuth();
-</script>
 </body>
 </html>
