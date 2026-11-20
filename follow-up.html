@@ -11,29 +11,21 @@
         .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
         input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { background-color: #3a0066; }
         .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
-        
         .leader-group { background: #fff; border-left: 5px solid #4B0082; padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .leader-title { font-size: 18px; font-weight: bold; color: #4B0082; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .absentee { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #eee; }
-        .absentee:last-child { border-bottom: none; }
-        .wa-btn { background-color: #25D366; color: white; text-decoration: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; display: inline-block; }
+        .leader-title { font-size: 18px; font-weight: bold; color: #4B0082; margin-bottom: 10px; }
+        .absentee { padding: 8px 0; border-bottom: 1px dashed #eee; }
+        .wa-btn { background-color: #25D366; color: white; text-decoration: none; padding: 10px; border-radius: 5px; font-size: 14px; font-weight: bold; display: block; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
-
     <div class="container">
         <a href="index.html" class="back-btn">← Back to Dashboard</a>
-        <div class="header">
-            <h2>Absence & Follow-Up Summary</h2>
-        </div>
-
-        <label>Select Service Date to Generate Follow-up:</label>
+        <div class="header"><h2>Absence & Follow-Up Summary</h2></div>
+        <label>Select Service Date:</label>
         <input type="date" id="followUpDate">
         <button onclick="generateFollowUp()">Generate Summary</button>
     </div>
-
     <div class="container" id="resultsContainer" style="display: none;">
         <h3>Absentees Grouped by Leader</h3>
         <div id="summaryList"></div>
@@ -43,98 +35,51 @@
         const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // Set today's date by default
         document.getElementById('followUpDate').valueAsDate = new Date();
 
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'login.html'; return false; }
+            return true;
+        }
+
         async function generateFollowUp() {
+            if (!await checkAuth()) return;
             const date = document.getElementById('followUpDate').value;
-            const resultsContainer = document.getElementById('resultsContainer');
+            const resContainer = document.getElementById('resultsContainer');
             const summaryList = document.getElementById('summaryList');
+            if (!date) { alert("Select a date."); return; }
+            
+            summaryList.innerHTML = '<p>Loading...</p>'; resContainer.style.display = 'block';
 
-            if (!date) {
-                alert("Please select a date first.");
-                return;
-            }
+            const { data, error } = await supabaseClient.from('attendance').select('*').eq('service_date', date).eq('status', 'Absent');
+            if (error) { summaryList.innerHTML = '<p style="color: red;">Error loading.</p>'; return; }
+            if (data.length === 0) { summaryList.innerHTML = '<p style="color: green;">No absentees for this date!</p>'; return; }
 
-            summaryList.innerHTML = '<p>Loading...</p>';
-            resultsContainer.style.display = 'block';
-
-            // Get only absentees for this date
-            const { data, error } = await supabaseClient
-                .from('attendance')
-                .select('*')
-                .eq('service_date', date)
-                .eq('status', 'Absent');
-
-            if (error) {
-                summaryList.innerHTML = '<p style="color: red;">Error loading data.</p>';
-                return;
-            }
-
-            if (data.length === 0) {
-                summaryList.innerHTML = `<p style="color: green; font-weight: bold;">No absentees recorded for this date! Everyone was present or excused.</p>`;
-                return;
-            }
-
-            // Group the absentees by leader
-            const groupedByLeader = {};
-            data.forEach(record => {
-                const leader = record.leader_name || "Unassigned";
-                if (!groupedByLeader[leader]) {
-                    groupedByLeader[leader] = [];
-                }
-                groupedByLeader[leader].push(record);
+            const grouped = {};
+            data.forEach(r => {
+                const leader = r.leader_name || "Unassigned";
+                if (!grouped[leader]) grouped[leader] = [];
+                grouped[leader].push(r);
             });
 
-            // Build the HTML
             summaryList.innerHTML = '';
-            for (const leader in groupedByLeader) {
-                const members = groupedByLeader[leader];
+            for (const leader in grouped) {
+                const members = grouped[leader];
+                let waMsg = `Hello ${leader}, here are the members who missed service on ${date}:\n\n`;
+                members.forEach((m, i) => { waMsg += `${i + 1}. ${m.member_name}\n`; });
+                waMsg += `\nPlease reach out to them. God bless you!`;
                 
-                // Create the message for WhatsApp (You can edit this text!)
-                let waMessage = `Hello ${leader}, here are the members who missed service on ${date}:\n\n`;
-                members.forEach((m, index) => {
-                    waMessage += `${index + 1}. ${m.member_name}\n`;
-                });
-                waMessage += `\nPlease reach out to them and see how they are doing. God bless you!`;
-                
-                // Create the WhatsApp Link
-                const waLink = `https://wa.me/?text=${encodeURIComponent(waMessage)}`;
-
                 const groupDiv = document.createElement('div');
                 groupDiv.className = 'leader-group';
-                groupDiv.innerHTML = `
-                    <div class="leader-title">Leader: ${leader}</div>
-                    <div id="leader-${leader.replace(/\s/g, '')}"></div>
-                    <a href="${waLink}" target="_blank" class="wa-btn" style="margin-top: 10px; display: block; text-align: center;">Send WhatsApp Message to ${leader}</a>
-                `;
+                groupDiv.innerHTML = `<div class="leader-title">Leader: ${leader}</div>`;
+                
+                members.forEach(m => { groupDiv.innerHTML += `<div class="absentee">${m.member_name}</div>`; });
+                
+                groupDiv.innerHTML += `<a href="https://wa.me/?text=${encodeURIComponent(waMsg)}" target="_blank" class="wa-btn">Send WhatsApp to ${leader}</a>`;
                 summaryList.appendChild(groupDiv);
-
-                // Add the list of absentees under the leader
-                const memberListContainer = groupDiv.querySelector(`#leader-${leader.replace(/\s/g, '')}`);
-                members.forEach(m => {
-                    const memberDiv = document.createElement('div');
-                    memberDiv.className = 'absentee';
-                    memberDiv.innerHTML = `<span>${m.member_name}</span>`;
-                    memberListContainer.appendChild(memberDiv);
-                });
             }
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function checkAuth() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) {
-            window.location.href = 'login.html';
-        }
-    }
-    checkAuth();
-</script>
 </body>
 </html>

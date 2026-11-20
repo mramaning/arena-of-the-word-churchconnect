@@ -11,37 +11,21 @@
         .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
         input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { background-color: #3a0066; }
         .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
-        
-        /* Styles for the visitor list */
         .visitor-item { border-bottom: 1px solid #ddd; padding: 15px 0; }
-        .visitor-name { font-weight: bold; font-size: 18px; color: #4B0082; margin-bottom: 5px; }
-        .visitor-details { font-size: 14px; color: #555; margin-bottom: 5px; }
+        .visitor-name { font-weight: bold; font-size: 18px; color: #4B0082; }
         .status-badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; background-color: #FFD700; color: #333; }
     </style>
 </head>
 <body>
-
     <div class="container">
         <a href="index.html" class="back-btn">← Back to Dashboard</a>
-        <div class="header">
-            <h2>Register a First Timer</h2>
-        </div>
-
+        <div class="header"><h2>Register a First Timer</h2></div>
         <form id="visitorForm">
-            <label>First Name</label>
-            <input type="text" id="firstName" required>
-            
-            <label>Last Name</label>
-            <input type="text" id="lastName" required>
-
-            <label>Phone Number (WhatsApp)</label>
-            <input type="tel" id="phone" required>
-
-            <label>Invited By</label>
-            <input type="text" id="invitedBy">
-
+            <label>First Name</label><input type="text" id="firstName" required>
+            <label>Last Name</label><input type="text" id="lastName" required>
+            <label>Phone Number (WhatsApp)</label><input type="tel" id="phone" required>
+            <label>Invited By</label><input type="text" id="invitedBy">
             <label>Follow-up Status</label>
             <select id="status">
                 <option value="Pending">Pending</option>
@@ -49,125 +33,66 @@
                 <option value="Visited">Visited</option>
                 <option value="Completed">Completed</option>
             </select>
-
             <button type="submit" id="submitBtn">Save Visitor</button>
         </form>
         <p id="message" style="color: green; font-weight: bold; text-align: center;"></p>
     </div>
 
-    <!-- NEW SECTION: The Visitor List -->
     <div class="container">
         <h3>Recent First Timers</h3>
-        <div id="visitorList">
-            <p>Loading visitors...</p>
-        </div>
+        <div id="visitorList"><p>Loading visitors...</p></div>
     </div>
 
     <script>
-        // --- REPLACE THESE WITH YOUR ACTUAL KEYS ---
         const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
-
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // --- 1. FUNCTION TO LOAD VISITORS ---
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'login.html'; return false; }
+            return true;
+        }
+
         async function loadVisitors() {
+            if (!await checkAuth()) return;
             const listContainer = document.getElementById('visitorList');
+            const { data, error } = await supabaseClient.from('first_timers').select('*').order('created_at', { ascending: false });
+
+            if (error || data.length === 0) { listContainer.innerHTML = '<p>No first timers yet.</p>'; return; }
             
-            // Get data from Supabase
-            const { data, error } = await supabaseClient
-                .from('first_timers')
-                .select('*')
-                .order('created_at', { ascending: false }); // Newest first
-
-            if (error) {
-                listContainer.innerHTML = '<p style="color: red;">Error loading visitors.</p>';
-                console.error(error);
-                return;
-            }
-
-            if (data.length === 0) {
-                listContainer.innerHTML = '<p>No first timers registered yet.</p>';
-                return;
-            }
-
-            // Build the HTML for the list
             listContainer.innerHTML = ''; 
             data.forEach(visitor => {
-                const div = document.createElement('div');
-                div.className = 'visitor-item';
-                div.innerHTML = `
-                    <div class="visitor-name">${visitor.first_name} ${visitor.last_name}</div>
-                    <div class="visitor-details">📞 ${visitor.phone}</div>
-                    <div class="visitor-details">Invited by: ${visitor.invited_by || 'Unknown'}</div>
-                    <span class="status-badge">${visitor.status}</span>
-                `;
-                listContainer.appendChild(div);
+                listContainer.innerHTML += `
+                    <div class="visitor-item">
+                        <div class="visitor-name">${visitor.first_name} ${visitor.last_name}</div>
+                        <div>📞 ${visitor.phone}</div>
+                        <div>Invited by: ${visitor.invited_by || 'Unknown'}</div>
+                        <span class="status-badge">${visitor.status}</span>
+                    </div>`;
             });
         }
 
-        // --- 2. HANDLE FORM SUBMISSION ---
         document.getElementById('visitorForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
+            if (!await checkAuth()) return;
+            const btn = document.getElementById('submitBtn'); const msg = document.getElementById('message');
+            btn.textContent = 'Saving...'; btn.disabled = true;
 
-            const submitBtn = document.getElementById('submitBtn');
-            const message = document.getElementById('message');
+            const { error } = await supabaseClient.from('first_timers').insert([{ 
+                first_name: document.getElementById('firstName').value, 
+                last_name: document.getElementById('lastName').value, 
+                phone: document.getElementById('phone').value, 
+                invited_by: document.getElementById('invitedBy').value, 
+                status: document.getElementById('status').value 
+            }]);
+
+            if (error) { msg.textContent = 'Error saving.'; msg.style.color = 'red'; } 
+            else { msg.textContent = 'Saved successfully!'; msg.style.color = 'green'; document.getElementById('visitorForm').reset(); loadVisitors(); }
             
-            submitBtn.textContent = 'Saving...';
-            submitBtn.disabled = true;
-
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const phone = document.getElementById('phone').value;
-            const invitedBy = document.getElementById('invitedBy').value;
-            const status = document.getElementById('status').value;
-
-            const { data, error } = await supabaseClient
-                .from('first_timers')
-                .insert([
-                    { 
-                        first_name: firstName, 
-                        last_name: lastName, 
-                        phone: phone, 
-                        invited_by: invitedBy, 
-                        status: status 
-                    }
-                ]);
-
-            if (error) {
-                console.error(error);
-                message.textContent = 'Error saving visitor.';
-                message.style.color = 'red';
-            } else {
-                message.textContent = 'Visitor saved successfully!';
-                message.style.color = 'green';
-                document.getElementById('visitorForm').reset(); 
-                
-                // Refresh the list to show the new visitor!
-                loadVisitors(); 
-            }
-
-            submitBtn.textContent = 'Save Visitor';
-            submitBtn.disabled = false;
+            btn.textContent = 'Save Visitor'; btn.disabled = false;
         });
-
-        // --- 3. LOAD LIST WHEN PAGE OPENS ---
         loadVisitors();
-
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function checkAuth() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) {
-            window.location.href = 'login.html';
-        }
-    }
-    checkAuth();
-</script>
 </body>
 </html>
