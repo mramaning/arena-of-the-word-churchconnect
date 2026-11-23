@@ -6,18 +6,17 @@
     <title>Attendance - Word Arena</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
-        .header { background-color: #4B0082; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        input, select, button { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { background-color: #4B0082; color: white; border: none; font-weight: bold; cursor: pointer; font-size: 16px; padding: 15px; }
-        button:hover { background-color: #3a0066; }
-        .back-btn { display: inline-block; margin-bottom: 20px; color: #4B0082; text-decoration: none; font-weight: bold; }
-        .member-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
-        .status-select { width: 120px; margin: 0; padding: 8px; }
-        .flex-row { display: flex; gap: 10px; }
-        .flex-row > div { flex: 1; }
-    </style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; margin: 0; padding: 20px; color: #E6E6FA; }
+    .header { background: linear-gradient(180deg, #2a004d 0%, #1a1a1a 100%); color: #D4AF37; padding: 15px; text-align: center; border-radius: 8px; border-bottom: 3px solid #D4AF37; margin-bottom: 20px; }
+    .container { max-width: 600px; margin: auto; background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+    input, select, button { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #4B0082; border-radius: 5px; box-sizing: border-box; background: #1a1a1a; color: white; }
+    button { background-color: #4B0082; color: #D4AF37; border: none; font-weight: bold; cursor: pointer; font-size: 16px; padding: 15px; }
+    .back-btn { display: inline-block; margin-bottom: 20px; color: #D4AF37; text-decoration: none; font-weight: bold; }
+    .member-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #4B0082; padding: 10px 0; }
+    .status-select { width: 120px; margin: 0; padding: 8px; }
+    .flex-row { display: flex; gap: 10px; }
+    .flex-row > div { flex: 1; }
+</style>
 </head>
 <body>
 
