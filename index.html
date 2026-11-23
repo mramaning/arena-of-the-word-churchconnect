@@ -101,12 +101,14 @@
 </head>
 <body>
 
-    <div class="header">
-        <!-- This is your logo -->
-        <img src="logo.jpg" alt="Word Arena Logo">
-        <h1>Arena of The Word Chapel</h1>
-        <p>ChurchConnect</p>
-    </div>
+    <<div class="header" style="position: relative;">
+    <!-- Small Logout button in the top right -->
+    <button onclick="logout()" style="position: absolute; top: 15px; right: 15px; background-color: transparent; color: #d9534f; border: 1px solid #d9534f; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; width: auto; margin: 0;">Logout</button>
+    
+    <img src="logo.jpg" alt="Word Arena Logo">
+    <h1>Arena of The Word Chapel</h1>
+    <p>ChurchConnect</p>
+</div>
 
     <div class="container">
         <p class="welcome-text">Welcome, Pastor / Leader</p>
@@ -137,10 +139,6 @@
                 Announcements
             </a>
 
-            <!-- This card spans the whole width to look nice with 5 items -->
-            <div class="card" style="grid-column: span 2; height: auto; padding: 15px;">
-                <button onclick="logout()" style="background-color: #d9534f; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%;">Logout</button>
-            </div>
 
         </div>
     </div>
