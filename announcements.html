@@ -23,7 +23,8 @@
 </head>
 <body>
 
-    <div class="container">
+    <!-- This is the Pastor's Form. It is hidden by default (style="display: none;") -->
+    <div class="container" id="pastorFormContainer" style="display: none;">
         <a href="index.html" class="back-btn">← Back to Dashboard</a>
         <div class="header">
             <h2>Church Announcements</h2>
@@ -42,6 +43,8 @@
     </div>
 
     <div class="container">
+        <!-- If a Leader is viewing, they need a way to go back -->
+        <a href="index.html" class="back-btn" id="leaderBackBtn">← Back to Dashboard</a>
         <h3>Recent Announcements</h3>
         <div id="announcementsList">
             <p>Loading announcements...</p>
@@ -53,19 +56,35 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // --- SECURITY CHECK ---
-        async function checkAuth() {
+        // --- 1. SECURITY CHECK & ROLE CHECK ---
+        async function checkAuthAndRole() {
+            // Check if they are logged in
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) {
                 window.location.href = 'login.html';
                 return false;
             }
+
+            // Check their role in the profiles table
+            const { data: profile, error } = await supabaseClient
+                .from('profiles')
+                .select('role')
+                .eq('id', session.user.id)
+                .single();
+
+            // If they are a Pastor, show the form
+            if (profile && profile.role === 'Pastor') {
+                document.getElementById('pastorFormContainer').style.display = 'block'; // Show form
+                document.getElementById('leaderBackBtn').style.display = 'none'; // Hide duplicate back button
+            }
+            // If they are a Leader, the form stays hidden (display: none) and they only see the list
+
             return true;
         }
 
-        // --- LOAD ANNOUNCEMENTS ---
+        // --- 2. LOAD ANNOUNCEMENTS ---
         async function loadAnnouncements() {
-            if (!await checkAuth()) return;
+            if (!await checkAuthAndRole()) return;
 
             const listContainer = document.getElementById('announcementsList');
             
@@ -86,7 +105,6 @@
 
             listContainer.innerHTML = ''; 
             data.forEach(item => {
-                // Format the date nicely
                 const date = new Date(item.created_at).toLocaleDateString('en-GB', { 
                     weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' 
                 });
@@ -102,10 +120,9 @@
             });
         }
 
-        // --- PUBLISH NEW ANNOUNCEMENT ---
+        // --- 3. PUBLISH ANNOUNCEMENT (Only works if form is visible) ---
         document.getElementById('announcementForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
-            if (!await checkAuth()) return;
 
             const submitBtn = document.getElementById('submitBtn');
             const statusMessage = document.getElementById('statusMessage');
@@ -121,7 +138,7 @@
                 .insert([{ 
                     title: title, 
                     message: message, 
-                    author: 'Pastor' // We will make this dynamic later!
+                    author: 'Pastor' 
                 }]);
 
             if (error) {
@@ -132,14 +149,14 @@
                 statusMessage.textContent = 'Announcement published successfully!';
                 statusMessage.style.color = 'green';
                 document.getElementById('announcementForm').reset(); 
-                loadAnnouncements(); // Refresh the list
+                loadAnnouncements(); 
             }
 
             submitBtn.textContent = 'Publish Announcement';
             submitBtn.disabled = false;
         });
 
-        // Load when page opens
+        // Run checks and load when page opens
         loadAnnouncements();
     </script>
 </body>
