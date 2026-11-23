@@ -3,76 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Arena Connect</title>
+    <title>Arena of The Word Chapel</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* Dark, sleek background to match the logo */
         body {
-            background-color: #f4f4f9;
+            background-color: #1a1a1a; /* Dark charcoal */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             color: #333;
         }
+        
+        /* Header styling */
         .header {
-            background-color: #4B0082; /* Royal Purple */
-            color: white;
-            padding: 20px;
+            background: linear-gradient(180deg, #2a004d 0%, #1a1a1a 100%);
+            padding: 30px 20px 20px 20px;
             text-align: center;
-            border-bottom: 5px solid #FFD700; /* Gold accent */
+            border-bottom: 3px solid #D4AF37; /* Gold accent */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+        
+        .header img {
+            width: 180px; /* Adjust this if the logo is too big/small */
+            border-radius: 10px; /* Slight curve on the corners */
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); /* Subtle gold glow */
+        }
+
         .header h1 {
             margin: 0;
             font-size: 22px;
+            color: #D4AF37; /* Gold text */
+            letter-spacing: 1px;
         }
+        
         .header p {
             margin: 5px 0 0 0;
             font-size: 14px;
             color: #E6E6FA;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
+
+        /* Dashboard Cards */
         .container {
             padding: 20px;
             max-width: 600px;
             margin: auto;
         }
+        
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
+        
         .card {
-            background: white;
+            background: #2a2a2a; /* Dark grey cards */
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             text-decoration: none;
-            color: #4B0082;
+            color: #D4AF37; /* Gold text */
             font-weight: bold;
-            border-top: 4px solid #4B0082;
+            border: 1px solid #4B0082; /* Purple border */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100px;
+            height: 110px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
+        
         .card:hover {
-            background: #f9f9f9;
+            background: #3a3a3a;
+            border-color: #D4AF37; /* Turns gold on hover */
+            transform: translateY(-2px);
         }
+        
         .card-icon {
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 10px;
+        }
+
+        .welcome-text {
+            color: #E6E6FA;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: normal;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
+        <!-- This is your logo -->
+        <img src="logo.jpg" alt="Word Arena Logo">
         <h1>Arena of The Word Chapel</h1>
-        <p>Word Arena Connect Dashboard</p>
-    </div><br>
-<button onclick="logout()" style="background-color: #d9534f; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px;">Logout</button>
+        <p>ChurchConnect</p>
+    </div>
 
     <div class="container">
-        <h3>Welcome, Pastor / Leader</h3>
+        <p class="welcome-text">Welcome, Pastor / Leader</p>
         <div class="dashboard-grid">
             
             <a href="members.html" class="card">
@@ -89,39 +126,43 @@
                 <span class="card-icon">🙋🏽‍♂️</span>
                 First Timers
             </a>
+
+            <a href="follow-up.html" class="card">
+                <span class="card-icon">🤝</span>
+                Follow-Up
+            </a>
             
             <a href="announcements.html" class="card">
                 <span class="card-icon">📢</span>
                 Announcements
             </a>
 
-        <a href="follow-up.html" class="card">
-    <span class="card-icon">🤝</span>
-    Follow-Up
-</a></div>
+            <!-- This card spans the whole width to look nice with 5 items -->
+            <div class="card" style="grid-column: span 2; height: auto; padding: 15px;">
+                <button onclick="logout()" style="background-color: #d9534f; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%;">Logout</button>
+            </div>
+
+        </div>
     </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <script>
+        const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function checkAuth() {
-        // Check if there is a logged-in user
-        const { data: { session } } = await supabaseClient.auth.getSession();
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+            }
+        }
         
-        if (!session) {
-            // If no user is logged in, kick them to the login page
+        async function logout() {
+            await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
         }
-    }
-    
-    // Run the check when the page loads
-    checkAuth();
-    async function logout() {
-    await supabaseClient.auth.signOut();
-    window.location.href = 'login.html';
-}
-</script></body>
+
+        checkAuth();
+    </script>
+</body>
 </html>
