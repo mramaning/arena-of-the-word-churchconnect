@@ -96,6 +96,64 @@
     background-color: #d9534f;
     color: white;
 }
+/* Page Background */
+body {
+    background-color: #1a1a1a; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Dashboard Cards */
+.container {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.card {
+    background: #2a2a2a; 
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    color: #D4AF37; 
+    font-weight: bold;
+    border: 1px solid #4B0082; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 110px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.card:hover {
+    background: #3a3a3a;
+    border-color: #D4AF37; 
+    transform: translateY(-2px);
+}
+
+.card-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.welcome-text {
+    color: #E6E6FA;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
     </style>
 </head>
 <body>
