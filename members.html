@@ -115,6 +115,9 @@ button:hover {
             <label>Email (Optional)</label>
             <input type="email" id="email">
 
+<label>Date of Birth (Optional)</label>
+<input type="date" id="dob">
+
             <label>Assign to Leader</label>
             <input type="text" id="leader" placeholder="e.g. Leader Samuel" required>
 
@@ -211,18 +214,20 @@ button:hover {
             const lastName = document.getElementById('lastName').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
+            const dob = document.getElementById('dob').value;
             const leader = document.getElementById('leader').value;
 
             const { data, error } = await supabaseClient
                 .from('members')
-                .insert([{ 
-                    first_name: firstName, 
-                    last_name: lastName, 
-                    phone: phone, 
-                    email: email, 
-                    assigned_leader: leader,
-                    status: 'Active'
-                }]);
+                ..insert([{ 
+    first_name: firstName, 
+    last_name: lastName, 
+    phone: phone, 
+    email: email, 
+    date_of_birth: dob || null, // <--- ADD THIS LINE
+    assigned_leader: leader,
+    status: 'Active'
+}]);
 
             if (error) {
                 message.textContent = 'Error saving member.';
