@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arena of The Word Chapel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
        /* Glassmorphism Header */
@@ -143,8 +144,10 @@ body {
 }
 
 .card-icon {
-    font-size: 28px;
-    margin-bottom: 10px;
+    font-size: 28px; /* Size of the icon */
+    margin-bottom: 12px;
+    color: #D4AF37; /* Gold color */
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); /* Subtle gold glow */
 }
 
 .welcome-text {
@@ -178,34 +181,33 @@ body {
     <div class="container">
         <p class="welcome-text">Welcome, Pastor / Leader</p>
         <div class="dashboard-grid">
-            
-            <a href="members.html" class="card">
-                <span class="card-icon">👥</span>
-                Members
-            </a>
-            
-            <a href="attendance.html" class="card">
-                <span class="card-icon">📋</span>
-                Attendance
-            </a>
-            
-            <a href="first-timers.html" class="card">
-                <span class="card-icon">🙋🏽‍♂️</span>
-                First Timers
-            </a>
+    
+    <a href="members.html" class="card">
+        <span class="card-icon"><i class="fa-solid fa-users"></i></span>
+        Members
+    </a>
+    
+    <a href="attendance.html" class="card">
+        <span class="card-icon"><i class="fa-solid fa-clipboard-user"></i></span>
+        Attendance
+    </a>
+    
+    <a href="first-timers.html" class="card">
+        <span class="card-icon"><i class="fa-solid fa-user-plus"></i></span>
+        First Timers
+    </a>
 
-            <a href="follow-up.html" class="card">
-                <span class="card-icon">🤝</span>
-                Follow-Up
-            </a>
-            
-            <a href="announcements.html" class="card">
-                <span class="card-icon">📢</span>
-                Announcements
-            </a>
+    <a href="follow-up.html" class="card">
+        <span class="card-icon"><i class="fa-solid fa-handshake-angle"></i></span>
+        Follow-Up
+    </a>
+    
+    <a href="announcements.html" class="card">
+        <span class="card-icon"><i class="fa-solid fa-bullhorn"></i></span>
+        Announcements
+    </a>
 
-
-        </div>
+</div>
     </div>
 
     <script>
