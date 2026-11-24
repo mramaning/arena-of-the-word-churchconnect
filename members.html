@@ -170,7 +170,7 @@
                     last_name: lastName, 
                     phone: phone, 
                     email: email, 
-                    date_of_birth: dob || null,
+                    date_of_birth: dob ? dob : null,
                     assigned_leader: leader,
                     status: 'Active'
                 }]);
