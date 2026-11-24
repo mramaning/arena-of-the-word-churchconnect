@@ -4,211 +4,318 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arena of The Word Chapel</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-       /* Glassmorphism Header */
-.header-container {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 3px solid #D4AF37;
-}
+        /* --- BASE STYLES --- */
+        body {
+            background-color: #1a1a1a; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #E6E6FA;
+        }
 
-/* The blurred background logo */
-.header-bg {
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    width: calc(100% + 40px);
-    height: calc(100% + 40px);
-    background-image: url('logo.jpg');
-    background-size: cover;
-    background-position: center;
-    filter: blur(8px) brightness(0.4); /* Blurs it and makes it dark */
-    z-index: 1;
-}
+        /* --- GLASS HEADER --- */
+        .header-container {
+            position: relative;
+            width: 100%;
+            padding: 15px 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            border-bottom: 3px solid #D4AF37;
+        }
 
-/* The dark glass overlay */
-.header-glass {
-    position: relative;
-    z-index: 2;
-    background: rgba(26, 26, 26, 0.6); /* Dark transparent glass */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    width: 90%;
-    max-width: 500px;
-    border-radius: 15px;
-    border: 1px solid rgba(212, 175, 55, 0.3); /* Faint gold border */
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
+        .header-bg {
+            position: absolute;
+            top: -20px; left: -20px;
+            width: calc(100% + 40px); height: calc(100% + 40px);
+            background-image: url('logo.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) brightness(0.3);
+            z-index: 1;
+        }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+        .header-glass {
+            position: relative;
+            z-index: 2;
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 800px;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
 
-.header-left img {
-    width: 60px; 
-    height: 60px;
-    border-radius: 50%; 
-    border: 2px solid #D4AF37; 
-    object-fit: cover;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-}
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-.header-text h1 {
-    margin: 0;
-    font-size: 18px;
-    color: #D4AF37; 
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-}
+        .header-left img {
+            width: 50px; height: 50px;
+            border-radius: 50%; 
+            border: 2px solid #D4AF37; 
+            object-fit: cover;
+        }
 
-.header-text p {
-    margin: 3px 0 0 0;
-    font-size: 11px;
-    color: #E6E6FA;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-}
+        .header-text h1 {
+            margin: 0; font-size: 18px; color: #D4AF37; 
+        }
+        
+        .header-text p {
+            margin: 3px 0 0 0; font-size: 11px; color: #E6E6FA;
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
 
-.logout-btn {
-    background-color: rgba(217, 83, 79, 0.2); 
-    color: #ff6b6b; 
-    border: 1px solid #ff6b6b; 
-    padding: 8px 15px; 
-    border-radius: 8px; 
-    font-size: 12px; 
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-}
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #D4AF37;
+            font-size: 18px;
+        }
 
-.logout-btn:hover {
-    background-color: #d9534f;
-    color: white;
-}
-/* Page Background */
-body {
-    background-color: #1a1a1a; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    color: #333;
-}
+        .header-right i { cursor: pointer; transition: color 0.3s; }
+        .header-right i:hover { color: white; }
 
-/* Dashboard Cards */
-.container {
-    padding: 20px;
-    max-width: 600px;
-    margin: auto;
-}
+        /* --- MAIN LAYOUT --- */
+        .main-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
 
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
+        /* --- WELCOME SECTION --- */
+        .welcome-section {
+            margin-bottom: 25px;
+        }
+        .welcome-section h2 {
+            margin: 0 0 5px 0;
+            color: #D4AF37;
+            font-size: 24px;
+        }
+        .welcome-section p {
+            margin: 0;
+            color: #999;
+            font-size: 14px;
+        }
 
-.card {
-    background: #2a2a2a; 
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    text-decoration: none;
-    color: #D4AF37; 
-    font-weight: bold;
-    border: 1px solid #4B0082; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 110px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
+        /* --- STATS GRID --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-.card:hover {
-    background: #3a3a3a;
-    border-color: #D4AF37; 
-    transform: translateY(-2px);
-}
+        .stat-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #4B0082;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
 
-.card-icon {
-    font-size: 28px; /* Size of the icon */
-    margin-bottom: 12px;
-    color: #D4AF37; /* Gold color */
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); /* Subtle gold glow */
-}
+        .stat-card i {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 40px;
+            color: rgba(75, 0, 130, 0.3); /* Purple background icon */
+        }
 
-.welcome-text {
-    color: #E6E6FA;
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 15px;
-    font-weight: normal;
-}
+        .stat-title {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #D4AF37;
+        }
+
+        /* --- NAVIGATION CARDS --- */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .nav-card {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #D4AF37;
+            font-weight: bold;
+            border: 1px solid #4B0082;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 90px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-card:hover {
+            background: #3a3a3a;
+            border-color: #D4AF37;
+            transform: translateY(-2px);
+        }
+
+        .nav-card i {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* --- CHARTS & LISTS --- */
+        .section-title {
+            color: #D4AF37;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #4B0082;
+            padding-bottom: 10px;
+        }
+
+        .chart-container, .list-container {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #4B0082;
+            margin-bottom: 30px;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+        .list-item:last-child { border-bottom: none; }
+        .list-item-left { display: flex; align-items: center; gap: 10px; }
+        .list-icon { color: #D4AF37; }
+
+        /* Loading Overlay */
+        #loading {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: #D4AF37;
+            font-size: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-  <div class="header-container">
-    <!-- The blurred background logo -->
-    <div class="header-bg"></div>
-    
-    <!-- The glass panel on top -->
-    <div class="header-glass">
-        <div class="header-left">
-            <img src="logo.jpg" alt="Word Arena Logo">
-            <div class="header-text">
-                <h1>Arena of The Word Chapel</h1>
-                <p>ChurchConnect</p>
+    <div id="loading">Loading Dashboard...</div>
+
+    <!-- HEADER -->
+    <div class="header-container">
+        <div class="header-bg"></div>
+        <div class="header-glass">
+            <div class="header-left">
+                <img src="logo.jpg" alt="Logo">
+                <div class="header-text">
+                    <h1>Arena of The Word</h1>
+                    <p id="currentDateDisplay">Loading Date...</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <i class="fa-regular fa-bell"></i>
+                <i class="fa-regular fa-user" title="Logout" onclick="logout()"></i>
             </div>
         </div>
-        <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
-</div>
 
-    <div class="container">
-        <p class="welcome-text">Welcome, Pastor / Leader</p>
-        <div class="dashboard-grid">
-    
-    <a href="members.html" class="card">
-        <span class="card-icon"><i class="fa-solid fa-users"></i></span>
-        Members
-    </a>
-    
-    <a href="attendance.html" class="card">
-        <span class="card-icon"><i class="fa-solid fa-clipboard-user"></i></span>
-        Attendance
-    </a>
-    
-    <a href="first-timers.html" class="card">
-        <span class="card-icon"><i class="fa-solid fa-user-plus"></i></span>
-        First Timers
-    </a>
+    <div class="main-container">
+        
+        <!-- WELCOME -->
+        <div class="welcome-section">
+            <h2 id="greeting">Good Morning, Pastor</h2>
+            <p>Here is what is happening in the church today.</p>
+        </div>
 
-    <a href="follow-up.html" class="card">
-        <span class="card-icon"><i class="fa-solid fa-handshake-angle"></i></span>
-        Follow-Up
-    </a>
-    
-    <a href="announcements.html" class="card">
-        <span class="card-icon"><i class="fa-solid fa-bullhorn"></i></span>
-        Announcements
-    </a>
+        <!-- STATISTICS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fa-solid fa-users"></i>
+                <div class="stat-title">Total Members</div>
+                <div class="stat-value" id="stat-members">0</div>
+            </div>
+            <div class="stat-card">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <div class="stat-title">Today's Attendance</div>
+                <div class="stat-value" id="stat-attendance">0</div>
+            </div>
+            <div class="stat-card">
+                <i class="fa-solid fa-user-plus"></i>
+                <div class="stat-title">First Timers (Month)</div>
+                <div class="stat-value" id="stat-visitors">0</div>
+            </div>
+            <div class="stat-card">
+                <i class="fa-solid fa-handshake-angle"></i>
+                <div class="stat-title">Pending Follow-ups</div>
+                <div class="stat-value" id="stat-followups">0</div>
+            </div>
+        </div>
 
-</div>
+        <!-- NAVIGATION -->
+        <h3 class="section-title">Quick Actions</h3>
+        <div class="nav-grid">
+            <a href="members.html" class="nav-card"><i class="fa-solid fa-address-book"></i>Members</a>
+            <a href="attendance.html" class="nav-card"><i class="fa-solid fa-clipboard-user"></i>Attendance</a>
+            <a href="first-timers.html" class="nav-card"><i class="fa-solid fa-user-plus"></i>First Timers</a>
+            <a href="follow-up.html" class="nav-card"><i class="fa-solid fa-handshake-angle"></i>Follow-Up</a>
+            <a href="announcements.html" class="nav-card" style="grid-column: span 2;"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
+        </div>
+
+        <!-- ANALYTICS -->
+        <h3 class="section-title">Attendance Analytics</h3>
+        <div class="chart-container">
+            <canvas id="attendanceChart"></canvas>
+        </div>
+
+        <!-- UPCOMING & ACTIVITIES -->
+        <h3 class="section-title">Upcoming & Activities</h3>
+        <div class="list-container">
+            <div class="list-item">
+                <div class="list-item-left"><i class="fa-solid fa-cake-candles list-icon"></i> Birthdays this week</div>
+                <div id="birthday-count" style="color:#D4AF37; font-weight:bold;">0</div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-left"><i class="fa-solid fa-bullhorn list-icon"></i> Latest Announcement</div>
+                <div id="latest-announcement" style="color:#999; font-size:12px;">None</div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -216,19 +323,110 @@ body {
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function checkAuth() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) {
-                window.location.href = 'login.html';
-            }
-        }
+        // 1. Set Date & Greeting
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-GB', options);
         
+        const hour = now.getHours();
+        let greetingText = "Good Evening";
+        if (hour < 12) greetingText = "Good Morning";
+        else if (hour < 18) greetingText = "Good Afternoon";
+        document.getElementById('greeting').textContent = `${greetingText}, Pastor`;
+
+        async function loadDashboardData() {
+            // Security Check
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'login.html'; return; }
+
+            // --- FETCH REAL DATA ---
+            
+            // 1. Total Members
+            const { count: memberCount } = await supabaseClient.from('members').select('*', { count: 'exact', head: true });
+            document.getElementById('stat-members').textContent = memberCount || 0;
+
+            // 2. First Timers this month
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+            const { count: visitorCount } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).gte('created_at', startOfMonth);
+            document.getElementById('stat-visitors').textContent = visitorCount || 0;
+
+            // 3. Today's Attendance
+            const todayStr = now.toISOString().split('T')[0];
+            const { count: attendanceToday } = await supabaseClient.from('attendance').select('*', { count: 'exact', head: true }).eq('service_date', todayStr).eq('status', 'Present');
+            document.getElementById('stat-attendance').textContent = attendanceToday || 0;
+
+            // 4. Pending Follow-ups (First Timers with status Pending)
+            const { count: pendingFollowups } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).eq('status', 'Pending');
+            document.getElementById('stat-followups').textContent = pendingFollowups || 0;
+
+            // 5. Fetch Attendance for Chart (Last 4 weeks)
+            const { data: attendanceData } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
+            
+            // Group by date for the chart
+            const chartLabels = [];
+            const chartData = [];
+            const groupedDates = {};
+            
+            if (attendanceData) {
+                attendanceData.forEach(record => {
+                    groupedDates[record.service_date] = (groupedDates[record.service_date] || 0) + 1;
+                });
+                // Get last 5 unique dates
+                Object.keys(groupedDates).slice(-5).forEach(date => {
+                    chartLabels.push(new Date(date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' }));
+                    chartData.push(groupedDates[date]);
+                });
+            }
+
+            // Render Chart
+            const ctx = document.getElementById('attendanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels.length ? chartLabels : ['No Data'],
+                    datasets: [{
+                        label: 'Attendance',
+                        data: chartData.length ? chartData : [0],
+                        borderColor: '#D4AF37',
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#4B0082',
+                        pointBorderColor: '#D4AF37'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#999' } },
+                        x: { grid: { display: false }, ticks: { color: '#999' } }
+                    }
+                }
+            });
+
+            // 6. Birthdays this week (Requires date_of_birth column)
+            // For now, we will mock the birthday count since the column is new
+            document.getElementById('birthday-count').textContent = "0"; 
+
+            // 7. Latest Announcement
+            const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
+            if (announcements && announcements.length > 0) {
+                document.getElementById('latest-announcement').textContent = announcements[0].title;
+            }
+
+            // Hide Loading Screen
+            document.getElementById('loading').style.display = 'none';
+        }
+
         async function logout() {
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
         }
 
-        checkAuth();
+        // Run
+        loadDashboardData();
     </script>
 </body>
 </html>
