@@ -5,92 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Follow-Up - Word Arena</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Glassmorphism Header for Sub-pages */
-.header-container {
-    position: relative;
-    width: 100%;
-    height: 120px; /* Smaller height for sub-pages */
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 3px solid #D4AF37;
-    margin-bottom: 20px; /* Space before the forms */
-}
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; margin: 0; padding: 20px; color: #E6E6FA; }
+        
+        /* Glass Header */
+        .header-container { position: relative; width: 100%; height: 120px; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 3px solid #D4AF37; margin-bottom: 20px; }
+        .header-bg { position: absolute; top: -20px; left: -20px; width: calc(100% + 40px); height: calc(100% + 40px); background-image: url('logo.jpg'); background-size: cover; background-position: center; filter: blur(8px) brightness(0.4); z-index: 1; }
+        .header-glass { position: relative; z-index: 2; background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .header-glass h2 { margin: 0; font-size: 18px; color: #D4AF37; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        .back-btn { color: #E6E6FA; text-decoration: none; font-weight: bold; font-size: 14px; transition: color 0.3s; }
+        .back-btn:hover { color: #D4AF37; }
 
-.header-bg {
-    position: absolute;
-    top: -20px; left: -20px;
-    width: calc(100% + 40px); height: calc(100% + 40px);
-    background-image: url('logo.jpg');
-    background-size: cover;
-    background-position: center;
-    filter: blur(8px) brightness(0.4);
-    z-index: 1;
-}
+        /* Containers */
+        .container { max-width: 600px; margin: auto; background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px; }
+        input, select, button, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #4B0082; border-radius: 5px; box-sizing: border-box; background: #1a1a1a; color: white; font-family: inherit; }
+        button { background: linear-gradient(135deg, #4B0082 0%, #2a004d 100%); color: #D4AF37; border: 1px solid #D4AF37; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.3s ease; }
+        button:hover { background: linear-gradient(135deg, #2a004d 0%, #4B0082 100%); transform: translateY(-1px); box-shadow: 0 6px 8px rgba(212, 175, 55, 0.3); }
 
-.header-glass {
-    position: relative;
-    z-index: 2;
-    background: rgba(26, 26, 26, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    width: 90%;
-    max-width: 500px;
-    border-radius: 12px;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-.header-glass h2 {
-    margin: 0;
-    font-size: 18px;
-    color: #D4AF37;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-}
-
-.back-btn {
-    color: #E6E6FA;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    transition: color 0.3s;
-}
-
-.back-btn:hover {
-    color: #D4AF37;
-}
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; margin: 0; padding: 20px; color: #E6E6FA; }
-    .header { background: linear-gradient(180deg, #2a004d 0%, #1a1a1a 100%); color: #D4AF37; padding: 15px; text-align: center; border-radius: 8px; border-bottom: 3px solid #D4AF37; margin-bottom: 20px; }
-    .container { max-width: 600px; margin: auto; background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px; }
-    input, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #4B0082; border-radius: 5px; box-sizing: border-box; background: #1a1a1a; color: white; }
-    button { background-color: #4B0082; color: #D4AF37; border: none; font-weight: bold; cursor: pointer; }
-    .back-btn { display: inline-block; margin-bottom: 20px; color: #D4AF37; text-decoration: none; font-weight: bold; }
-    .leader-group { background: #1a1a1a; border-left: 5px solid #D4AF37; padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-    .leader-title { font-size: 18px; font-weight: bold; color: #D4AF37; margin-bottom: 10px; }
-    .absentee { padding: 8px 0; border-bottom: 1px dashed #4B0082; color: #E6E6FA; }
-    .wa-btn { background-color: #25D366; color: white; text-decoration: none; padding: 10px; border-radius: 5px; font-size: 14px; font-weight: bold; display: block; text-align: center; margin-top: 10px; }
-</style>
+        /* Group Cards */
+        .leader-group { background: #222; border-left: 5px solid #D4AF37; padding: 15px; margin-bottom: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .leader-title { font-size: 18px; font-weight: bold; color: #D4AF37; margin-bottom: 15px; border-bottom: 1px solid #4B0082; padding-bottom: 10px; }
+        
+        .absentee-card { background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333; }
+        .absentee-name { font-weight: bold; color: #E6E6FA; font-size: 16px; margin-bottom: 5px; }
+        .absentee-phone { font-size: 13px; color: #999; margin-bottom: 10px; }
+        
+        .action-row { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-wa { background-color: #25D366; color: white; border: none; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-size: 13px; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; width: auto; flex: 1; justify-content: center; }
+        .btn-wa:hover { background-color: #128C7E; color: white; }
+        
+        .btn-save-note { background-color: #4B0082; color: #D4AF37; border: 1px solid #D4AF37; padding: 8px 15px; font-size: 13px; width: auto; flex: 1; margin: 0; }
+        
+        .note-input { margin: 5px 0; font-size: 13px; padding: 8px; }
+        
+        .bulk-wa-btn { display: block; text-align: center; margin-top: 15px; background-color: #25D366; color: white; padding: 12px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 15px; }
+    </style>
 </head>
 <body>
-   <div class="header-container">
-    <div class="header-bg"></div>
-    <div class="header-glass">
-        <a href="index.html" class="back-btn">← Dashboard</a>
-        <h2>Follow-Up Summary</h2>
+
+    <div class="header-container">
+        <div class="header-bg"></div>
+        <div class="header-glass">
+            <a href="index.html" class="back-btn">← Dashboard</a>
+            <h2>Follow-Up Summary</h2>
+        </div>
     </div>
-</div>
-        <label>Select Service Date:</label>
+
+    <div class="container">
+        <label>Select Service Date to Generate Follow-up:</label>
         <input type="date" id="followUpDate">
         <button onclick="generateFollowUp()">Generate Summary</button>
     </div>
+
     <div class="container" id="resultsContainer" style="display: none;">
-        <h3>Absentees Grouped by Leader</h3>
+        <h3 style="color:#D4AF37; text-align:center;">Absentees by Leader</h3>
         <div id="summaryList"></div>
     </div>
 
@@ -98,6 +67,7 @@
         const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
         document.getElementById('followUpDate').valueAsDate = new Date();
 
         async function checkAuth() {
@@ -115,9 +85,21 @@
             
             summaryList.innerHTML = '<p>Loading...</p>'; resContainer.style.display = 'block';
 
-            const { data, error } = await supabaseClient.from('attendance').select('*').eq('service_date', date).eq('status', 'Absent');
-            if (error) { summaryList.innerHTML = '<p style="color: red;">Error loading.</p>'; return; }
-            if (data.length === 0) { summaryList.innerHTML = '<p style="color: green;">No absentees for this date!</p>'; return; }
+            // Fetch absentees, but we also need their phone numbers. 
+            // We have to join the attendance table with the members table!
+            const { data, error } = await supabaseClient
+                .from('attendance')
+                .select(`
+                    *,
+                    members (
+                        phone
+                    )
+                `)
+                .eq('service_date', date)
+                .eq('status', 'Absent');
+
+            if (error) { summaryList.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`; return; }
+            if (data.length === 0) { summaryList.innerHTML = '<p style="color: green; text-align:center;">No absentees for this date!</p>'; return; }
 
             const grouped = {};
             data.forEach(r => {
@@ -129,18 +111,71 @@
             summaryList.innerHTML = '';
             for (const leader in grouped) {
                 const members = grouped[leader];
+                
+                // 1. Build the bulk message for the Leader
                 let waMsg = `Hello ${leader}, here are the members who missed service on ${date}:\n\n`;
                 members.forEach((m, i) => { waMsg += `${i + 1}. ${m.member_name}\n`; });
                 waMsg += `\nPlease reach out to them. God bless you!`;
-                
+                const bulkWaLink = `https://wa.me/?text=${encodeURIComponent(waMsg)}`;
+
                 const groupDiv = document.createElement('div');
                 groupDiv.className = 'leader-group';
-                groupDiv.innerHTML = `<div class="leader-title">Leader: ${leader}</div>`;
+                groupDiv.innerHTML = `<div class="leader-title"><i class="fa-solid fa-user-tie"></i> Leader: ${leader}</div>`;
                 
-                members.forEach(m => { groupDiv.innerHTML += `<div class="absentee">${m.member_name}</div>`; });
+                // 2. Build the individual member cards
+                members.forEach(m => {
+                    const phone = m.members ? m.members.phone : '';
+                    // Clean phone number for WhatsApp (remove spaces/symbols)
+                    const cleanPhone = phone ? phone.replace(/\D/g,'') : '';
+                    const memberWaLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=Hello%20${m.member_name.split(' ')[0]},%20we%20missed%20you%20at%20church%20on%20${date}.%20Hope%20you%20are%20doing%20well!` : '#';
+
+                    groupDiv.innerHTML += `
+                        <div class="absentee-card">
+                            <div class="absentee-name">${m.member_name}</div>
+                            <div class="absentee-phone"><i class="fa-solid fa-phone"></i> ${phone || 'No phone on file'}</div>
+                            
+                            <textarea class="note-input" id="note-${m.id}" placeholder="Type follow-up note here... (e.g. Called, traveling)"></textarea>
+                            
+                            <div class="action-row">
+                                ${cleanPhone ? `<a href="${memberWaLink}" target="_blank" class="btn-wa"><i class="fa-brands fa-whatsapp"></i> Message Member</a>` : ''}
+                                <button class="btn-save-note" onclick="saveNote(${m.member_id}, '${m.id}')">Save Note</button>
+                            </div>
+                        </div>
+                    `;
+                });
                 
-                groupDiv.innerHTML += `<a href="https://wa.me/?text=${encodeURIComponent(waMsg)}" target="_blank" class="wa-btn">Send WhatsApp to ${leader}</a>`;
+                groupDiv.innerHTML += `<a href="${bulkWaLink}" target="_blank" class="bulk-wa-btn"><i class="fa-brands fa-whatsapp"></i> Send Summary to ${leader}</a>`;
                 summaryList.appendChild(groupDiv);
+            }
+        }
+
+        // 3. Save the note to the database
+        window.saveNote = async function(memberId, attendanceId) {
+            if (!await checkAuth()) return;
+            const noteText = document.getElementById(`note-${attendanceId}`).value;
+            const btn = event.target;
+
+            btn.textContent = 'Saving...';
+
+            // We will update the member's record with the follow-up note
+            // (Assuming you add a 'follow_up_note' column to the members table later)
+            const { error } = await supabaseClient
+                .from('members')
+                .update({ last_follow_up: new Date().toISOString() }) // We can just record the date for now
+                .eq('id', memberId);
+
+            if (error) {
+                alert('Error saving note.');
+                btn.textContent = 'Save Note';
+            } else {
+                btn.textContent = 'Saved!';
+                btn.style.backgroundColor = '#006400';
+                btn.style.color = 'white';
+                setTimeout(() => {
+                    btn.textContent = 'Save Note';
+                    btn.style.backgroundColor = '#4B0082';
+                    btn.style.color = '#D4AF37';
+                }, 2000);
             }
         }
     </script>
