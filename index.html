@@ -24,7 +24,6 @@
             position: relative; 
             width: 100%; 
             padding: 15px 0; 
-            overflow: hidden; 
             display: flex; 
             justify-content: center; 
             border-bottom: 3px solid #D4AF37; 
@@ -32,10 +31,7 @@
         
         .header-bg { 
             position: absolute; 
-            top: -20px; 
-            left: -20px; 
-            width: calc(100% + 40px); 
-            height: calc(100% + 40px); 
+            top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('logo.jpg'); 
             background-size: cover; 
             background-position: center; 
@@ -60,75 +56,39 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
         }
         
-        .header-left { 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
         
         .header-left img { 
-            width: 50px; 
-            height: 50px; 
-            border-radius: 50%; 
-            border: 2px solid #D4AF37; 
-            object-fit: cover; 
+            width: 50px; height: 50px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; 
         }
         
-        .header-text h1 { 
-            margin: 0; 
-            font-size: 18px; 
-            color: #D4AF37; 
-        }
+        .header-text h1 { margin: 0; font-size: 18px; color: #D4AF37; }
+        .header-text p { margin: 3px 0 0 0; font-size: 11px; color: #E6E6FA; text-transform: uppercase; letter-spacing: 1.5px; }
         
-        .header-text p { 
-            margin: 3px 0 0 0; 
-            font-size: 11px; 
-            color: #E6E6FA; 
-            text-transform: uppercase; 
-            letter-spacing: 1.5px; 
-        }
-        
-        .header-right { 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            color: #D4AF37; 
-            font-size: 18px; 
-        }
-        
-        .header-right i { 
-            cursor: pointer; 
-            transition: color 0.3s; 
-        }
-        
-        .header-right i:hover { 
-            color: white; 
-        }
+        .header-right { display: flex; align-items: center; gap: 20px; color: #D4AF37; font-size: 18px; position: relative; }
+        .header-right i { cursor: pointer; transition: color 0.3s; }
+        .header-right i:hover { color: white; }
 
-        /* User Dropdown Menu (Fixed position so it floats over everything) */
-        .user-menu-container { position: relative; display: inline-block; }
+        /* --- FIXED USER DROPDOWN --- */
+        .user-menu-container { position: relative; }
         .user-dropdown { 
             display: none; 
-            position: fixed; 
-            right: 20px; 
-            top: 80px; 
+            position: absolute; 
+            right: 0; 
+            top: 35px; 
             background: #2a2a2a; 
             border: 1px solid #D4AF37; 
             border-radius: 8px; 
             padding: 15px; 
             width: 200px; 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.6); 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.8); 
             z-index: 9999; 
             text-align: left; 
         }
         .user-dropdown.active { display: block; }
 
         /* --- MAIN LAYOUT --- */
-        .main-container { 
-            padding: 20px; 
-            max-width: 800px; 
-            margin: auto; 
-        }
+        .main-container { padding: 20px; max-width: 800px; margin: auto; }
 
         /* --- WELCOME --- */
         .welcome-section { margin-bottom: 25px; }
@@ -177,7 +137,7 @@
                 <i class="fa-regular fa-bell" onclick="showNotifications()" title="Notifications"></i>
                 
                 <div class="user-menu-container">
-                    <i class="fa-regular fa-user" onclick="toggleUserMenu()" title="Profile"></i>
+                    <i class="fa-regular fa-user" onclick="toggleUserMenu(event)" title="Profile"></i>
                     <div class="user-dropdown" id="userDropdown">
                         <p id="userEmailDisplay" style="font-size: 12px; margin: 0 0 10px 0; color: #999;">Loading...</p>
                         <button onclick="logout()" style="background: #d9534f; color: white; border: none; padding: 8px; border-radius: 5px; font-size: 12px; cursor: pointer; width: 100%;">Logout</button>
@@ -251,13 +211,11 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function loadDashboard() {
-            // 1. Check Auth
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'login.html'; return; }
 
             document.getElementById('userEmailDisplay').textContent = session.user.email;
 
-            // 2. Check Role and Name from profiles table
             const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
             
             let role = 'Leader'; 
@@ -268,7 +226,6 @@
                 fullName = profile.full_name || fullName;
             }
 
-            // Set Date & Greeting
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-GB', options);
@@ -280,13 +237,11 @@
             
             document.getElementById('greeting').textContent = `${greetingText}, ${fullName}`;
 
-            // 3. Adjust UI based on Role
             if (role === 'Leader') {
                 document.getElementById('nav-announcements').style.display = 'none'; 
                 document.getElementById('member-label').textContent = 'My Members'; 
             }
 
-            // --- FETCH REAL DATA ---
             let memberQuery = supabaseClient.from('members').select('*', { count: 'exact', head: true });
             if (role === 'Leader') {
                 memberQuery = memberQuery.eq('assigned_leader', fullName);
@@ -305,7 +260,6 @@
             const { count: pendingFollowups } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).eq('status', 'Pending');
             document.getElementById('stat-followups').textContent = pendingFollowups || 0;
 
-            // Fetch Attendance for Chart
             const { data: attendanceData } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
             
             const chartLabels = [];
@@ -349,7 +303,6 @@
                 }
             });
 
-            // Birthdays this week
             const { data: allMembers } = await supabaseClient.from('members').select('first_name, last_name, date_of_birth');
             let birthdayCount = 0; let birthdayNames = [];
             if (allMembers) {
@@ -377,14 +330,14 @@
                 document.getElementById('birthday-count').parentElement.appendChild(bdayDiv);
             }
 
-            // Latest Announcement
             const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
             document.getElementById('latest-announcement').textContent = (announcements && announcements.length > 0) ? announcements[0].title : "No announcements yet";
 
             document.getElementById('loading').style.display = 'none';
         }
 
-        function toggleUserMenu() {
+        function toggleUserMenu(event) {
+            event.stopPropagation(); // Prevents the window click from immediately closing it
             const dropdown = document.getElementById('userDropdown');
             dropdown.classList.toggle('active');
         }
@@ -399,11 +352,9 @@
         }
 
         window.onclick = function(event) {
-            if (!event.target.matches('.fa-user')) {
-                const dropdown = document.getElementById('userDropdown');
-                if (dropdown && dropdown.classList.contains('active')) {
-                    dropdown.classList.remove('active');
-                }
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown && dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
             }
         }
 
