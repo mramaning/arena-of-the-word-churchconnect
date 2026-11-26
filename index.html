@@ -10,16 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- BASE STYLES --- */
-        body { 
-            background-color: #1a1a1a; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            color: #E6E6FA; 
-        }
-
-        /* --- GLASS HEADER --- */
+        body { background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #E6E6FA; }
         .header-container { position: relative; width: 100%; padding: 15px 0; display: flex; justify-content: center; border-bottom: 3px solid #D4AF37; }
         .header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('logo.jpg'); background-size: cover; background-position: center; filter: blur(8px) brightness(0.3); z-index: 1; }
         .header-glass { position: relative; z-index: 2; background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.3); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
@@ -30,43 +21,30 @@
         .header-right { display: flex; align-items: center; gap: 20px; color: #D4AF37; font-size: 18px; position: relative; }
         .header-right i { cursor: pointer; transition: color 0.3s; }
         .header-right i:hover { color: white; }
-
-        /* User Dropdown Menu */
         .user-menu-container { position: relative; }
         .user-dropdown { display: none; position: absolute; right: 0; top: 35px; background: #2a2a2a; border: 1px solid #D4AF37; border-radius: 8px; padding: 15px; width: 200px; box-shadow: 0 8px 16px rgba(0,0,0,0.8); z-index: 9999; text-align: left; }
         .user-dropdown.active { display: block; }
-
-        /* --- MAIN LAYOUT --- */
         .main-container { padding: 20px; max-width: 800px; margin: auto; }
         .welcome-section { margin-bottom: 25px; }
         .welcome-section h2 { margin: 0 0 5px 0; color: #D4AF37; font-size: 24px; }
         .welcome-section p { margin: 0; color: #999; font-size: 14px; }
-
-        /* --- STATS GRID --- */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
         .stat-card { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; overflow: hidden; text-decoration: none; display: block; transition: all 0.3s ease; cursor: pointer; }
         .stat-card:hover { background: #3a3a3a; border-color: #D4AF37; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(212, 175, 55, 0.2); }
         .stat-card i { position: absolute; right: 15px; top: 15px; font-size: 40px; color: rgba(212, 175, 55, 0.15); z-index: 0; }
         .stat-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; position: relative; z-index: 1; }
         .stat-value { font-size: 28px; font-weight: bold; color: #D4AF37; position: relative; z-index: 1; }
-
-        /* --- NAVIGATION CARDS --- */
         .nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
         .nav-card { background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center; text-decoration: none; color: #D4AF37; font-weight: bold; border: 1px solid #4B0082; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 90px; transition: all 0.3s ease; }
         .nav-card:hover { background: #3a3a3a; border-color: #D4AF37; transform: translateY(-2px); }
         .nav-card i { font-size: 24px; margin-bottom: 10px; }
-
-        /* --- CHARTS & LISTS --- */
         .section-title { color: #D4AF37; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #4B0082; padding-bottom: 10px; }
         .chart-container, .list-container { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; margin-bottom: 30px; }
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #333; }
         .list-item:last-child { border-bottom: none; }
         .list-item-left { display: flex; align-items: center; gap: 10px; }
         .list-icon { color: #D4AF37; }
-
         #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #D4AF37; font-size: 20px; font-weight: bold; }
-
-        /* --- MODAL FOR STAT NAMES --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; }
         .modal-content { background: #2a2a2a; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid #D4AF37; max-height: 80vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #4B0082; padding-bottom: 10px; }
@@ -96,6 +74,7 @@
                     <i class="fa-regular fa-user" onclick="toggleUserMenu(event)" title="Profile"></i>
                     <div class="user-dropdown" id="userDropdown">
                         <p id="userEmailDisplay" style="font-size: 12px; margin: 0 0 10px 0; color: #999;">Loading...</p>
+                        <p id="userRoleDisplay" style="font-size: 11px; margin: 0 0 10px 0; color: #D4AF37;">Role: Loading</p>
                         <button onclick="logout()" style="background: #d9534f; color: white; border: none; padding: 8px; border-radius: 5px; font-size: 12px; cursor: pointer; width: 100%;">Logout</button>
                     </div>
                 </div>
@@ -104,13 +83,12 @@
     </div>
 
     <div class="main-container">
-        
         <div class="welcome-section">
             <h2 id="greeting">Loading...</h2>
             <p>Here is what is happening in the church today.</p>
         </div>
 
-        <!-- CLICKABLE STATS CARDS -->
+        <!-- STATS CARDS -->
         <div class="stats-grid">
             <div class="stat-card" onclick="openStatModal('members')">
                 <i class="fa-solid fa-users"></i>
@@ -119,7 +97,7 @@
             </div>
             <div class="stat-card" onclick="openStatModal('attendance')">
                 <i class="fa-solid fa-clipboard-check"></i>
-                <div class="stat-title">Today's Attendance</div>
+                <div class="stat-title" id="attendance-label">Today's Attendance</div>
                 <div class="stat-value" id="stat-attendance">0</div>
             </div>
             <div class="stat-card" onclick="openStatModal('visitors')">
@@ -134,20 +112,35 @@
             </div>
         </div>
 
+        <!-- QUICK ACTIONS -->
         <h3 class="section-title">Quick Actions</h3>
         <div class="nav-grid">
             <a href="members.html" class="nav-card"><i class="fa-solid fa-address-book"></i>Members</a>
-            <a href="attendance.html" class="nav-card"><i class="fa-solid fa-clipboard-user"></i>Attendance</a>
-            <a href="first-timers.html" class="nav-card"><i class="fa-solid fa-user-plus"></i>First Timers</a>
+            
+            <!-- Restricted for Leaders -->
+            <a href="attendance.html" class="nav-card" id="nav-attendance"><i class="fa-solid fa-clipboard-user"></i>Take Attendance</a>
+            <a href="first-timers.html" class="nav-card" id="nav-first-timers"><i class="fa-solid fa-user-plus"></i>Register Visitor</a>
+            
             <a href="follow-up.html" class="nav-card"><i class="fa-solid fa-handshake-angle"></i>Follow-Up</a>
+            
+            <!-- Restricted for Leaders and Secretaries -->
             <a href="announcements.html" class="nav-card" id="nav-announcements" style="grid-column: span 2;"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
         </div>
 
-        <h3 class="section-title">Attendance Analytics</h3>
-        <div class="chart-container">
-            <canvas id="attendanceChart"></canvas>
+        <!-- CHARTS (Dual for Leaders) -->
+        <h3 class="section-title" id="chart-title-1">Attendance Analytics</h3>
+        <div class="chart-container" id="chart-container-1">
+            <canvas id="attendanceChart1"></canvas>
+        </div>
+        
+        <div id="leader-church-chart-container" style="display:none;">
+            <h3 class="section-title">Entire Church Attendance</h3>
+            <div class="chart-container">
+                <canvas id="attendanceChart2"></canvas>
+            </div>
         </div>
 
+        <!-- UPCOMING -->
         <h3 class="section-title">Upcoming & Activities</h3>
         <div class="list-container">
             <div class="list-item">
@@ -159,19 +152,16 @@
                 <div id="latest-announcement" style="color:#999; font-size:12px;">None</div>
             </div>
         </div>
-
     </div>
 
-    <!-- THE MODAL -->
+    <!-- MODAL -->
     <div class="modal" id="statModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modalTitle">Names</h3>
                 <button class="close-btn" onclick="closeStatModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="modalBody">
-                <!-- Names will be injected here -->
-            </div>
+            <div id="modalBody"></div>
         </div>
     </div>
 
@@ -180,10 +170,10 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Store data globally so the modal can read it without fetching again
         let dashboardData = { members: [], attendance: [], visitors: [], followups: [] };
         let currentUserRole = 'Leader';
         let currentUserName = '';
+        let churchTotalToday = 0; // We will pass this to the modal
 
         async function loadDashboard() {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -192,79 +182,75 @@
             document.getElementById('userEmailDisplay').textContent = session.user.email;
 
             const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
-            
-            currentUserRole = 'Leader'; 
-            currentUserName = session.user.email.split('@')[0]; 
+            currentUserRole = profile ? profile.role : 'Leader'; 
+            currentUserName = profile && profile.full_name ? profile.full_name : session.user.email.split('@')[0]; 
+            document.getElementById('userRoleDisplay').textContent = `Role: ${currentUserRole}`;
 
-            if (profile) {
-                currentUserRole = profile.role;
-                currentUserName = profile.full_name || currentUserName;
-            }
-
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-GB', options);
-            
-            const hour = now.getHours();
-            let greetingText = "Good Evening";
-            if (hour < 12) greetingText = "Good Morning";
-            else if (hour < 18) greetingText = "Good Afternoon";
-            
-            document.getElementById('greeting').textContent = `${greetingText}, ${currentUserName}`;
-
+            // --- ROLE-BASED UI CHANGES ---
             if (currentUserRole === 'Leader') {
                 document.getElementById('nav-announcements').style.display = 'none'; 
+                document.getElementById('nav-attendance').style.display = 'none'; 
+                document.getElementById('nav-first-timers').style.display = 'none'; 
+                
+                // Adjust labels for Leaders
                 document.getElementById('member-label').textContent = 'My Members'; 
+                document.getElementById('attendance-label').textContent = 'My Members Present Today'; 
+                document.getElementById('chart-title-1').textContent = 'My Members Attendance History';
+                
+                // Show the second chart for the whole church
+                document.getElementById('leader-church-chart-container').style.display = 'block';
+            } else if (currentUserRole === 'Secretary') {
+                // Secretaries cannot see Announcements or Follow-Up
+                document.getElementById('nav-announcements').style.display = 'none'; 
             }
 
-            // FETCH MEMBERS
+            // --- FETCH DATA ---
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+            // Members
             let memberQuery = supabaseClient.from('members').select('*');
-            if (currentUserRole === 'Leader') {
-                memberQuery = memberQuery.eq('assigned_leader', currentUserName);
-            }
+            if (currentUserRole === 'Leader') memberQuery = memberQuery.eq('assigned_leader', currentUserName);
             const { data: memberData } = await memberQuery;
             dashboardData.members = memberData || [];
             document.getElementById('stat-members').textContent = dashboardData.members.length;
 
-            // FETCH ATTENDANCE (Today)
-            const todayStr = now.toISOString().split('T')[0];
-            const { data: attData } = await supabaseClient.from('attendance').select('*').eq('service_date', todayStr).eq('status', 'Present');
+            // Today's Attendance (My Members)
+            let attQuery = supabaseClient.from('attendance').select('*').eq('service_date', todayStr).eq('status', 'Present');
+            if (currentUserRole === 'Leader') attQuery = attQuery.eq('leader_name', currentUserName);
+            const { data: attData } = await attQuery;
             dashboardData.attendance = attData || [];
             document.getElementById('stat-attendance').textContent = dashboardData.attendance.length;
 
-            // FETCH VISITORS (This Month)
-            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+            // Today's Attendance (Whole Church)
+            const { count: churchCount } = await supabaseClient.from('attendance').select('*', { count: 'exact', head: true }).eq('service_date', todayStr).eq('status', 'Present');
+            churchTotalToday = churchCount || 0;
+
+            // Visitors
             const { data: visData } = await supabaseClient.from('first_timers').select('*').gte('created_at', startOfMonth);
             dashboardData.visitors = visData || [];
             document.getElementById('stat-visitors').textContent = dashboardData.visitors.length;
 
-            // FETCH PENDING FOLLOW-UPS
+            // Followups
             const { data: folData } = await supabaseClient.from('first_timers').select('*').eq('status', 'Pending');
             dashboardData.followups = folData || [];
             document.getElementById('stat-followups').textContent = dashboardData.followups.length;
 
+            // --- CHART 1 (Leader's Members OR Whole Church if not Leader) ---
+            let chart1Query = supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
+            if (currentUserRole === 'Leader') chart1Query = chart1Query.eq('leader_name', currentUserName);
+            const { data: chart1Data } = await chart1Query;
+            
+            renderChart('attendanceChart1', chart1Data);
 
-            // --- CHART & OTHER LOGIC ---
-            const { data: chartData } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
-            const chartLabels = []; const chartCounts = []; const groupedDates = {};
-            if (chartData) {
-                chartData.forEach(record => { groupedDates[record.service_date] = (groupedDates[record.service_date] || 0) + 1; });
-                Object.keys(groupedDates).slice(-5).forEach(date => {
-                    chartLabels.push(new Date(date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' }));
-                    chartCounts.push(groupedDates[date]);
-                });
+            // --- CHART 2 (Entire Church - Only for Leaders) ---
+            if (currentUserRole === 'Leader') {
+                const { data: chart2Data } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
+                renderChart('attendanceChart2', chart2Data);
             }
 
-            const ctx = document.getElementById('attendanceChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartLabels.length ? chartLabels : ['No Data'],
-                    datasets: [{ label: 'Attendance', data: chartCounts.length ? chartCounts : [0], borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#4B0082', pointBorderColor: '#D4AF37' }]
-                },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#999' } }, x: { grid: { display: false }, ticks: { color: '#999' } } } }
-            });
-
+            // Birthdays & Announcements
             const { data: allMembers } = await supabaseClient.from('members').select('first_name, date_of_birth');
             let birthdayCount = 0; let birthdayNames = [];
             if (allMembers) {
@@ -280,88 +266,70 @@
                 });
             }
             document.getElementById('birthday-count').textContent = birthdayCount;
-            if (birthdayCount > 0) {
-                const bdayDiv = document.createElement('div');
-                bdayDiv.style.fontSize = '12px'; bdayDiv.style.color = '#D4AF37';
-                bdayDiv.style.marginTop = '5px'; bdayDiv.style.textAlign = 'right';
-                bdayDiv.textContent = birthdayNames.join(', ');
-                document.getElementById('birthday-count').parentElement.appendChild(bdayDiv);
-            }
-
+            
             const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
             document.getElementById('latest-announcement').textContent = (announcements && announcements.length > 0) ? announcements[0].title : "No announcements yet";
 
             document.getElementById('loading').style.display = 'none';
         }
 
-        // --- MODAL LOGIC ---
+        function renderChart(canvasId, data) {
+            const chartLabels = []; const chartCounts = []; const groupedDates = {};
+            if (data) {
+                data.forEach(record => { groupedDates[record.service_date] = (groupedDates[record.service_date] || 0) + 1; });
+                Object.keys(groupedDates).slice(-5).forEach(date => {
+                    chartLabels.push(new Date(date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' }));
+                    chartCounts.push(groupedDates[date]);
+                });
+            }
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: { labels: chartLabels.length ? chartLabels : ['No Data'], datasets: [{ label: 'Attendance', data: chartCounts.length ? chartCounts : [0], borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#4B0082', pointBorderColor: '#D4AF37' }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#999' } }, x: { grid: { display: false }, ticks: { color: '#999' } } } }
+            });
+        }
+
         window.openStatModal = function(type) {
             const modal = document.getElementById('statModal');
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
-            
-            body.innerHTML = ''; // Clear old data
+            body.innerHTML = ''; 
             
             if (type === 'members') {
                 title.textContent = currentUserRole === 'Leader' ? 'My Members' : 'All Members';
                 if (dashboardData.members.length === 0) body.innerHTML = '<p style="color:#999;">No members found.</p>';
-                dashboardData.members.forEach(m => {
-                    body.innerHTML += `<div class="name-list-item">${m.first_name} ${m.last_name}</div>`;
-                });
+                dashboardData.members.forEach(m => { body.innerHTML += `<div class="name-list-item">${m.first_name} ${m.last_name}</div>`; });
             } 
             else if (type === 'attendance') {
                 title.textContent = "Today's Attendance";
-                if (dashboardData.attendance.length === 0) body.innerHTML = '<p style="color:#999;">No attendance recorded for today yet.</p>';
-                dashboardData.attendance.forEach(a => {
-                    body.innerHTML += `<div class="name-list-item">${a.member_name}</div>`;
-                });
+                if (currentUserRole === 'Leader') {
+                    body.innerHTML += `<div style="color:#D4AF37; font-weight:bold; margin-bottom:15px; padding-bottom:10px; border-bottom:1px solid #4B0082;">Total Church Attendance Today: ${churchTotalToday}</div>`;
+                    body.innerHTML += `<div style="color:#E6E6FA; font-weight:bold; margin-bottom:5px;">My Members Present:</div>`;
+                    if (dashboardData.attendance.length === 0) body.innerHTML += '<p style="color:#999;">None of your members recorded yet.</p>';
+                } else {
+                    if (dashboardData.attendance.length === 0) body.innerHTML = '<p style="color:#999;">No attendance recorded for today yet.</p>';
+                }
+                dashboardData.attendance.forEach(a => { body.innerHTML += `<div class="name-list-item">${a.member_name}</div>`; });
             }
             else if (type === 'visitors') {
                 title.textContent = "First Timers This Month";
                 if (dashboardData.visitors.length === 0) body.innerHTML = '<p style="color:#999;">No first timers this month.</p>';
-                dashboardData.visitors.forEach(v => {
-                    body.innerHTML += `<div class="name-list-item">${v.first_name} ${v.last_name}</div>`;
-                });
+                dashboardData.visitors.forEach(v => { body.innerHTML += `<div class="name-list-item">${v.first_name} ${v.last_name}</div>`; });
             }
             else if (type === 'followups') {
                 title.textContent = "Pending Follow-ups";
                 if (dashboardData.followups.length === 0) body.innerHTML = '<p style="color:#999;">No pending follow-ups. Good job!</p>';
-                dashboardData.followups.forEach(f => {
-                    body.innerHTML += `<div class="name-list-item">${f.first_name} ${f.last_name} <br><span style="font-size:11px; color:#D4AF37;">Phone: ${f.phone || 'N/A'}</span></div>`;
-                });
+                dashboardData.followups.forEach(f => { body.innerHTML += `<div class="name-list-item">${f.first_name} ${f.last_name} <br><span style="font-size:11px; color:#D4AF37;">Phone: ${f.phone || 'N/A'}</span></div>`; });
             }
-
             modal.style.display = 'flex';
         }
 
-        window.closeStatModal = function() {
-            document.getElementById('statModal').style.display = 'none';
-        }
-
-        // --- UI TOGGLES ---
-        function toggleUserMenu(event) {
-            event.stopPropagation(); 
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('active');
-        }
-
-        function showNotifications() {
-            const pending = document.getElementById('stat-followups').textContent;
-            if (pending > 0) alert(`You have ${pending} pending follow-ups!`);
-            else alert("No new notifications.");
-        }
-
-        window.onclick = function(event) {
-            const dropdown = document.getElementById('userDropdown');
-            if (dropdown && dropdown.classList.contains('active')) dropdown.classList.remove('active');
-            const modal = document.getElementById('statModal');
-            if (event.target === modal) modal.style.display = 'none';
-        }
-
-        async function logout() {
-            await supabaseClient.auth.signOut();
-            window.location.href = 'login.html';
-        }
+        window.closeStatModal = function() { document.getElementById('statModal').style.display = 'none'; }
+        function toggleUserMenu(event) { event.stopPropagation(); document.getElementById('userDropdown').classList.toggle('active'); }
+        function showNotifications() { const pending = document.getElementById('stat-followups').textContent; if (pending > 0) alert(`You have ${pending} pending follow-ups!`); else alert("No new notifications."); }
+        window.onclick = function(event) { const dropdown = document.getElementById('userDropdown'); if (dropdown && dropdown.classList.contains('active')) dropdown.classList.remove('active'); const modal = document.getElementById('statModal'); if (event.target === modal) modal.style.display = 'none'; }
+        async function logout() { await supabaseClient.auth.signOut(); window.location.href = 'login.html'; }
 
         loadDashboard();
     </script>

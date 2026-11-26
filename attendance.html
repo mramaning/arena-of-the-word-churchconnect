@@ -3,108 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance - Word Arena</title>
+    <title>Take Attendance - Word Arena</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Glassmorphism Header for Sub-pages */
-.header-container {
-    position: relative;
-    width: 100%;
-    height: 120px; /* Smaller height for sub-pages */
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 3px solid #D4AF37;
-    margin-bottom: 20px; /* Space before the forms */
-}
-
-.header-bg {
-    position: absolute;
-    top: -20px; left: -20px;
-    width: calc(100% + 40px); height: calc(100% + 40px);
-    background-image: url('logo.jpg');
-    background-size: cover;
-    background-position: center;
-    filter: blur(8px) brightness(0.4);
-    z-index: 1;
-}
-
-.header-glass {
-    position: relative;
-    z-index: 2;
-    background: rgba(26, 26, 26, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    width: 90%;
-    max-width: 500px;
-    border-radius: 12px;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-.header-glass h2 {
-    margin: 0;
-    font-size: 18px;
-    color: #D4AF37;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-}
-
-.back-btn {
-    color: #E6E6FA;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    transition: color 0.3s;
-}
-
-.back-btn:hover {
-    color: #D4AF37;
-}
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; margin: 0; padding: 20px; color: #E6E6FA; }
-    .header { background: linear-gradient(180deg, #2a004d 0%, #1a1a1a 100%); color: #D4AF37; padding: 15px; text-align: center; border-radius: 8px; border-bottom: 3px solid #D4AF37; margin-bottom: 20px; }
-    .container { max-width: 600px; margin: auto; background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-    input, select, button { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #4B0082; border-radius: 5px; box-sizing: border-box; background: #1a1a1a; color: white; }
-   button { 
-    background: linear-gradient(135deg, #4B0082 0%, #2a004d 100%); 
-    color: #D4AF37; 
-    border: 1px solid #D4AF37; 
-    font-weight: bold; 
-    cursor: pointer; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    transition: all 0.3s ease;
-}
-button:hover { 
-    background: linear-gradient(135deg, #2a004d 0%, #4B0082 100%); 
-    transform: translateY(-1px);
-    box-shadow: 0 6px 8px rgba(212, 175, 55, 0.3);
-}
-    .back-btn { display: inline-block; margin-bottom: 20px; color: #D4AF37; text-decoration: none; font-weight: bold; }
-    .member-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #4B0082; padding: 10px 0; }
-    .status-select { width: 120px; margin: 0; padding: 8px; }
-    .flex-row { display: flex; gap: 10px; }
-    .flex-row > div { flex: 1; }
-</style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; margin: 0; padding: 20px; color: #E6E6FA; }
+        .header-container { position: relative; width: 100%; height: 120px; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 3px solid #D4AF37; margin-bottom: 20px; }
+        .header-bg { position: absolute; top: -20px; left: -20px; width: calc(100% + 40px); height: calc(100% + 40px); background-image: url('logo.jpg'); background-size: cover; background-position: center; filter: blur(8px) brightness(0.4); z-index: 1; }
+        .header-glass { position: relative; z-index: 2; background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .header-glass h2 { margin: 0; font-size: 18px; color: #D4AF37; }
+        .back-btn { color: #E6E6FA; text-decoration: none; font-weight: bold; font-size: 14px; transition: color 0.3s; }
+        .back-btn:hover { color: #D4AF37; }
+        .container { max-width: 600px; margin: auto; background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px; }
+        input, select, button { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 1px solid #4B0082; border-radius: 5px; box-sizing: border-box; background: #1a1a1a; color: white; }
+        button { background: linear-gradient(135deg, #4B0082 0%, #2a004d 100%); color: #D4AF37; border: 1px solid #D4AF37; font-weight: bold; cursor: pointer; font-size: 16px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.3s ease; }
+        button:hover { background: linear-gradient(135deg, #2a004d 0%, #4B0082 100%); transform: translateY(-1px); box-shadow: 0 6px 8px rgba(212, 175, 55, 0.3); }
+        .member-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #4B0082; padding: 10px 0; }
+        .member-name { font-weight: bold; color: #E6E6FA; }
+        .member-leader { font-size: 12px; color: #999; }
+        .status-select { width: 120px; margin: 0; padding: 8px; }
+        .flex-row { display: flex; gap: 10px; }
+        .flex-row > div { flex: 1; }
+    </style>
 </head>
 <body>
 
     <div class="header-container">
-    <div class="header-bg"></div>
-    <div class="header-glass">
-        <a href="index.html" class="back-btn">← Dashboard</a>
-        <h2>Record Attendance</h2>
+        <div class="header-bg"></div>
+        <div class="header-glass">
+            <a href="index.html" class="back-btn">← Dashboard</a>
+            <h2>Take Attendance</h2>
+        </div>
     </div>
-</div>
 
+    <div class="container">
         <div class="flex-row">
-            <div>
-                <label>Service Date</label>
-                <input type="date" id="serviceDate" required>
-            </div>
+            <div><label>Service Date</label><input type="date" id="serviceDate" required></div>
             <div>
                 <label>Service Name</label>
                 <select id="serviceName">
@@ -114,11 +48,7 @@ button:hover {
                 </select>
             </div>
         </div>
-
-        <div id="membersContainer">
-            <p>Loading members...</p>
-        </div>
-
+        <div id="membersContainer"><p>Loading members...</p></div>
         <button type="button" id="saveBtn" onclick="saveAttendance()">Save Attendance</button>
         <p id="message" style="color: green; font-weight: bold; text-align: center; margin-top: 10px;"></p>
     </div>
@@ -131,30 +61,30 @@ button:hover {
         let churchMembers = []; 
         document.getElementById('serviceDate').valueAsDate = new Date();
 
-        // --- SECURITY CHECK ---
-        async function checkAuth() {
+        async function checkAuthAndRole() {
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) {
-                window.location.href = 'login.html'; // Kick them out
-                return false;
+            if (!session) { window.location.href = 'login.html'; return null; }
+
+            const { data: profile } = await supabaseClient.from('profiles').select('role').eq('id', session.user.id).single();
+            
+            // BLOCK LEADERS FROM THIS PAGE
+            if (!profile || (profile.role !== 'Pastor' && profile.role !== 'Secretary')) {
+                alert("Access Denied: Only Pastors and Secretaries can take attendance.");
+                window.location.href = 'index.html';
+                return null;
             }
-            return true;
+            return session;
         }
 
-        // --- LOAD MEMBERS ---
         async function loadMembers() {
-            if (!await checkAuth()) return; // Check security first
+            const session = await checkAuthAndRole();
+            if (!session) return;
 
             const container = document.getElementById('membersContainer');
-            
-            const { data, error } = await supabaseClient
-                .from('members')
-                .select('*')
-                .eq('status', 'Active')
-                .order('first_name', { ascending: true });
+            const { data, error } = await supabaseClient.from('members').select('*').eq('status', 'Active').order('first_name', { ascending: true });
 
             if (error || data.length === 0) {
-                container.innerHTML = '<p style="color: red;">No active members found. Please add members first.</p>';
+                container.innerHTML = `<p style="color: red;">No active members found.</p>`;
                 return;
             }
 
@@ -165,9 +95,9 @@ button:hover {
                 const div = document.createElement('div');
                 div.className = 'member-row';
                 div.innerHTML = `
-                    <div>
-                        <div style="font-weight: bold; color: #333;">${member.first_name} ${member.last_name}</div>
-                        <div style="font-size: 12px; color: #777;">Leader: ${member.assigned_leader}</div>
+                    <div class="member-info">
+                        <span class="member-name">${member.first_name} ${member.last_name}</span>
+                        <span class="member-leader">Leader: ${member.assigned_leader}</span>
                     </div>
                     <select class="status-select" id="status-${member.id}">
                         <option value="Present">Present</option>
@@ -179,19 +109,16 @@ button:hover {
             });
         }
 
-        // --- SAVE ATTENDANCE ---
         async function saveAttendance() {
-            if (!await checkAuth()) return; // Check security first
+            const session = await checkAuthAndRole();
+            if (!session) return;
 
             const date = document.getElementById('serviceDate').value;
             const service = document.getElementById('serviceName').value;
             const message = document.getElementById('message');
             const saveBtn = document.getElementById('saveBtn');
 
-            if (!date) {
-                alert("Please select a date!");
-                return;
-            }
+            if (!date) { alert("Please select a date!"); return; }
 
             saveBtn.textContent = 'Saving...';
             saveBtn.disabled = true;
@@ -199,30 +126,16 @@ button:hover {
             const recordsToSave = churchMembers.map(member => {
                 const status = document.getElementById(`status-${member.id}`).value;
                 return {
-                    service_date: date,
-                    service_name: service,
-                    member_id: member.id,
-                    member_name: `${member.first_name} ${member.last_name}`,
-                    status: status,
-                    leader_name: member.assigned_leader
+                    service_date: date, service_name: service, member_id: member.id,
+                    member_name: `${member.first_name} ${member.last_name}`, status: status, leader_name: member.assigned_leader
                 };
             });
 
-            const { data, error } = await supabaseClient
-                .from('attendance')
-                .insert(recordsToSave);
+            const { error } = await supabaseClient.from('attendance').insert(recordsToSave);
 
-            if (error) {
-                console.error(error);
-                message.textContent = 'Error saving attendance.';
-                message.style.color = 'red';
-            } else {
-                message.textContent = `Attendance saved successfully!`;
-                message.style.color = 'green';
-            }
-
-            saveBtn.textContent = 'Save Attendance';
-            saveBtn.disabled = false;
+            if (error) { message.textContent = 'Error saving attendance.'; message.style.color = 'red'; } 
+            else { message.textContent = `Attendance saved successfully!`; message.style.color = 'green'; }
+            saveBtn.textContent = 'Save Attendance'; saveBtn.disabled = false;
         }
 
         loadMembers();

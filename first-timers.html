@@ -124,11 +124,20 @@ button:hover {
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function checkAuth() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) { window.location.href = 'login.html'; return false; }
-            return true;
-        }
+       async function checkAuth() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return false; }
+
+    const { data: profile } = await supabaseClient.from('profiles').select('role').eq('id', session.user.id).single();
+    
+    // BLOCK LEADERS
+    if (!profile || (profile.role !== 'Pastor' && profile.role !== 'Secretary')) {
+        alert("Access Denied: Only Pastors and Secretaries can register First Timers.");
+        window.location.href = 'index.html';
+        return false;
+    }
+    return true;
+}
 
         async function loadVisitors() {
             if (!await checkAuth()) return;
