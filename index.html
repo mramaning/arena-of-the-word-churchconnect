@@ -5,239 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arena of The Word Chapel</title>
     
-    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* --- BASE STYLES --- */
-        body {
-            background-color: #1a1a1a; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #E6E6FA;
-        }
+        body { background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #E6E6FA; }
 
         /* --- GLASS HEADER --- */
-        .header-container {
-            position: relative;
-            width: 100%;
-            padding: 15px 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            border-bottom: 3px solid #D4AF37;
-        }
-
-        .header-bg {
-            position: absolute;
-            top: -20px; left: -20px;
-            width: calc(100% + 40px); height: calc(100% + 40px);
-            background-image: url('logo.jpg');
-            background-size: cover;
-            background-position: center;
-            filter: blur(8px) brightness(0.3);
-            z-index: 1;
-        }
-
-        .header-glass {
-            position: relative;
-            z-index: 2;
-            background: rgba(26, 26, 26, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            width: 90%;
-            max-width: 800px;
-            border-radius: 15px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-left img {
-            width: 50px; height: 50px;
-            border-radius: 50%; 
-            border: 2px solid #D4AF37; 
-            object-fit: cover;
-        }
-
-        .header-text h1 {
-            margin: 0; font-size: 18px; color: #D4AF37; 
-        }
-        
-        .header-text p {
-            margin: 3px 0 0 0; font-size: 11px; color: #E6E6FA;
-            text-transform: uppercase; letter-spacing: 1.5px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: #D4AF37;
-            font-size: 18px;
-        }
-
+        .header-container { position: relative; width: 100%; padding: 15px 0; overflow: hidden; display: flex; justify-content: center; border-bottom: 3px solid #D4AF37; }
+        .header-bg { position: absolute; top: -20px; left: -20px; width: calc(100% + 40px); height: calc(100% + 40px); background-image: url('logo.jpg'); background-size: cover; background-position: center; filter: blur(8px) brightness(0.3); z-index: 1; }
+        .header-glass { position: relative; z-index: 2; background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.3); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-left img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
+        .header-text h1 { margin: 0; font-size: 18px; color: #D4AF37; }
+        .header-text p { margin: 3px 0 0 0; font-size: 11px; color: #E6E6FA; text-transform: uppercase; letter-spacing: 1.5px; }
+        .header-right { display: flex; align-items: center; gap: 15px; color: #D4AF37; font-size: 18px; }
         .header-right i { cursor: pointer; transition: color 0.3s; }
         .header-right i:hover { color: white; }
 
         /* --- MAIN LAYOUT --- */
-        .main-container {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-        }
+        .main-container { padding: 20px; max-width: 800px; margin: auto; }
 
-        /* --- WELCOME SECTION --- */
-        .welcome-section {
-            margin-bottom: 25px;
-        }
-        .welcome-section h2 {
-            margin: 0 0 5px 0;
-            color: #D4AF37;
-            font-size: 24px;
-        }
-        .welcome-section p {
-            margin: 0;
-            color: #999;
-            font-size: 14px;
-        }
+        /* --- WELCOME --- */
+        .welcome-section { margin-bottom: 25px; }
+        .welcome-section h2 { margin: 0 0 5px 0; color: #D4AF37; font-size: 24px; }
+        .welcome-section p { margin: 0; color: #999; font-size: 14px; }
 
         /* --- STATS GRID --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: #2a2a2a;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #4B0082;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card i {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            font-size: 40px;
-            color: rgba(75, 0, 130, 0.3); /* Purple background icon */
-        }
-
-        .stat-title {
-            font-size: 12px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #D4AF37;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+        .stat-card i { position: absolute; right: 15px; top: 15px; font-size: 40px; color: rgba(75, 0, 130, 0.3); }
+        .stat-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .stat-value { font-size: 28px; font-weight: bold; color: #D4AF37; }
 
         /* --- NAVIGATION CARDS --- */
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .nav-card {
-            background: #2a2a2a;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            text-decoration: none;
-            color: #D4AF37;
-            font-weight: bold;
-            border: 1px solid #4B0082;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 90px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-card:hover {
-            background: #3a3a3a;
-            border-color: #D4AF37;
-            transform: translateY(-2px);
-        }
-
-        .nav-card i {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+        .nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
+        .nav-card { background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center; text-decoration: none; color: #D4AF37; font-weight: bold; border: 1px solid #4B0082; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 90px; transition: all 0.3s ease; }
+        .nav-card:hover { background: #3a3a3a; border-color: #D4AF37; transform: translateY(-2px); }
+        .nav-card i { font-size: 24px; margin-bottom: 10px; }
 
         /* --- CHARTS & LISTS --- */
-        .section-title {
-            color: #D4AF37;
-            font-size: 18px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #4B0082;
-            padding-bottom: 10px;
-        }
-
-        .chart-container, .list-container {
-            background: #2a2a2a;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #4B0082;
-            margin-bottom: 30px;
-        }
-
-        .list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #333;
-        }
+        .section-title { color: #D4AF37; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #4B0082; padding-bottom: 10px; }
+        .chart-container, .list-container { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; margin-bottom: 30px; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #333; }
         .list-item:last-child { border-bottom: none; }
         .list-item-left { display: flex; align-items: center; gap: 10px; }
         .list-icon { color: #D4AF37; }
 
-        /* Loading Overlay */
-        #loading {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #1a1a1a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: #D4AF37;
-            font-size: 20px;
-            font-weight: bold;
-        }
+        #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #D4AF37; font-size: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="loading">Loading Dashboard...</div>
 
-    <!-- HEADER -->
     <div class="header-container">
         <div class="header-bg"></div>
         <div class="header-glass">
@@ -259,7 +82,7 @@
         
         <!-- WELCOME -->
         <div class="welcome-section">
-            <h2 id="greeting">Good Morning, Pastor</h2>
+            <h2 id="greeting">Loading...</h2>
             <p>Here is what is happening in the church today.</p>
         </div>
 
@@ -267,7 +90,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <i class="fa-solid fa-users"></i>
-                <div class="stat-title">Total Members</div>
+                <div class="stat-title" id="member-label">Total Members</div>
                 <div class="stat-value" id="stat-members">0</div>
             </div>
             <div class="stat-card">
@@ -294,7 +117,8 @@
             <a href="attendance.html" class="nav-card"><i class="fa-solid fa-clipboard-user"></i>Attendance</a>
             <a href="first-timers.html" class="nav-card"><i class="fa-solid fa-user-plus"></i>First Timers</a>
             <a href="follow-up.html" class="nav-card"><i class="fa-solid fa-handshake-angle"></i>Follow-Up</a>
-            <a href="announcements.html" class="nav-card" style="grid-column: span 2;"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
+            <!-- Announcements card will be hidden for Leaders -->
+            <a href="announcements.html" class="nav-card" id="nav-announcements" style="grid-column: span 2;"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
         </div>
 
         <!-- ANALYTICS -->
@@ -323,46 +147,66 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 1. Set Date & Greeting
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-GB', options);
-        
-        const hour = now.getHours();
-        let greetingText = "Good Evening";
-        if (hour < 12) greetingText = "Good Morning";
-        else if (hour < 18) greetingText = "Good Afternoon";
-        document.getElementById('greeting').textContent = `${greetingText}, Pastor`;
-
-        async function loadDashboardData() {
-            // Security Check
+        async function loadDashboard() {
+            // 1. Check Auth
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'login.html'; return; }
 
-            // --- FETCH REAL DATA ---
+            // 2. Check Role and Name from profiles table
+            const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
             
-            // 1. Total Members
-            const { count: memberCount } = await supabaseClient.from('members').select('*', { count: 'exact', head: true });
+            let role = 'Leader'; // Default to Leader
+            let fullName = session.user.email.split('@')[0]; // Fallback name
+
+            if (profile) {
+                role = profile.role;
+                fullName = profile.full_name || fullName;
+            }
+
+            // Set Date & Greeting
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-GB', options);
+            
+            const hour = now.getHours();
+            let greetingText = "Good Evening";
+            if (hour < 12) greetingText = "Good Morning";
+            else if (hour < 18) greetingText = "Good Afternoon";
+            
+            document.getElementById('greeting').textContent = `${greetingText}, ${fullName}`;
+
+            // 3. Adjust UI based on Role
+            if (role === 'Leader') {
+                document.getElementById('nav-announcements').style.display = 'none'; // Hide announcements
+                document.getElementById('member-label').textContent = 'My Members'; // Change label
+            }
+
+            // --- FETCH REAL DATA ---
+            // Total Members (Filtered for Leaders)
+            let memberQuery = supabaseClient.from('members').select('*', { count: 'exact', head: true });
+            if (role === 'Leader') {
+                memberQuery = memberQuery.eq('assigned_leader', fullName);
+            }
+            const { count: memberCount } = await memberQuery;
             document.getElementById('stat-members').textContent = memberCount || 0;
 
-            // 2. First Timers this month
+            // First Timers this month
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
             const { count: visitorCount } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).gte('created_at', startOfMonth);
             document.getElementById('stat-visitors').textContent = visitorCount || 0;
 
-            // 3. Today's Attendance
+            // Today's Attendance
             const todayStr = now.toISOString().split('T')[0];
             const { count: attendanceToday } = await supabaseClient.from('attendance').select('*', { count: 'exact', head: true }).eq('service_date', todayStr).eq('status', 'Present');
             document.getElementById('stat-attendance').textContent = attendanceToday || 0;
 
-            // 4. Pending Follow-ups (First Timers with status Pending)
+            // Pending Follow-ups
             const { count: pendingFollowups } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).eq('status', 'Pending');
             document.getElementById('stat-followups').textContent = pendingFollowups || 0;
 
-            // 5. Fetch Attendance for Chart (Last 4 weeks)
+            // Fetch Attendance for Chart
             const { data: attendanceData } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
             
-            // Group by date for the chart
             const chartLabels = [];
             const chartData = [];
             const groupedDates = {};
@@ -371,14 +215,12 @@
                 attendanceData.forEach(record => {
                     groupedDates[record.service_date] = (groupedDates[record.service_date] || 0) + 1;
                 });
-                // Get last 5 unique dates
                 Object.keys(groupedDates).slice(-5).forEach(date => {
                     chartLabels.push(new Date(date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' }));
                     chartData.push(groupedDates[date]);
                 });
             }
 
-            // Render Chart
             const ctx = document.getElementById('attendanceChart').getContext('2d');
             new Chart(ctx, {
                 type: 'line',
@@ -406,62 +248,39 @@
                 }
             });
 
-            // 6. Calculate Birthdays this week
-const { data: allMembers } = await supabaseClient.from('members').select('first_name, last_name, date_of_birth');
-
-let birthdayCount = 0;
-let birthdayNames = [];
-
-if (allMembers) {
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    
-    allMembers.forEach(m => {
-        if (m.date_of_birth) {
-            // Get the month and day of the birthday
-            const dob = new Date(m.date_of_birth);
-            const bdayThisYear = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
-            
-            // If the birthday already passed this year, check next year's date
-            if (bdayThisYear < today) {
-                bdayThisYear.setFullYear(today.getFullYear() + 1);
+            // Birthdays this week
+            const { data: allMembers } = await supabaseClient.from('members').select('first_name, last_name, date_of_birth');
+            let birthdayCount = 0; let birthdayNames = [];
+            if (allMembers) {
+                const today = new Date(); today.setHours(0,0,0,0);
+                allMembers.forEach(m => {
+                    if (m.date_of_birth) {
+                        const dob = new Date(m.date_of_birth);
+                        const bdayThisYear = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
+                        if (bdayThisYear < today) bdayThisYear.setFullYear(today.getFullYear() + 1);
+                        const diffTime = Math.abs(bdayThisYear - today);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        if (diffDays <= 7) {
+                            birthdayCount++;
+                            birthdayNames.push(`${m.first_name}`);
+                        }
+                    }
+                });
             }
-            
-            // Calculate difference in days
-            const diffTime = Math.abs(bdayThisYear - today);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            // If birthday is within the next 7 days (including today)
-            if (diffDays <= 7) {
-                birthdayCount++;
-                birthdayNames.push(`${m.first_name} ${m.last_name}`);
+            document.getElementById('birthday-count').textContent = birthdayCount;
+            if (birthdayCount > 0) {
+                const bdayDiv = document.createElement('div');
+                bdayDiv.style.fontSize = '12px'; bdayDiv.style.color = '#D4AF37';
+                bdayDiv.style.marginTop = '5px'; bdayDiv.style.textAlign = 'right';
+                bdayDiv.textContent = birthdayNames.join(', ');
+                document.getElementById('birthday-count').parentElement.appendChild(bdayDiv);
             }
-        }
-    });
-}
 
-document.getElementById('birthday-count').textContent = birthdayCount;
+            // Latest Announcement
+            const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
+            document.getElementById('latest-announcement').textContent = (announcements && announcements.length > 0) ? announcements[0].title : "No announcements yet";
 
-// If there are birthdays, show their names below the count
-if (birthdayCount > 0) {
-    const bdayDiv = document.createElement('div');
-    bdayDiv.style.fontSize = '12px';
-    bdayDiv.style.color = '#D4AF37';
-    bdayDiv.style.marginTop = '5px';
-    bdayDiv.style.textAlign = 'right';
-    bdayDiv.textContent = birthdayNames.join(', ');
-    document.getElementById('birthday-count').parentElement.appendChild(bdayDiv);
-}
-
-// 7. Latest Announcement
-const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
-if (announcements && announcements.length > 0) {
-    document.getElementById('latest-announcement').textContent = announcements[0].title;
-} else {
-    document.getElementById('latest-announcement').textContent = "No announcements yet";
-}
-
-            // Hide Loading Screen
+            // Hide Loading
             document.getElementById('loading').style.display = 'none';
         }
 
@@ -470,8 +289,7 @@ if (announcements && announcements.length > 0) {
             window.location.href = 'login.html';
         }
 
-        // Run
-        loadDashboardData();
+        loadDashboard();
     </script>
 </body>
 </html>
