@@ -58,7 +58,6 @@
             align-items: center; 
             justify-content: space-between; 
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
-            overflow: visible;
         }
         
         .header-left { 
@@ -106,22 +105,22 @@
             color: white; 
         }
 
-        /* User Dropdown Menu */
+        /* User Dropdown Menu (Fixed position so it floats over everything) */
         .user-menu-container { position: relative; display: inline-block; }
         .user-dropdown { 
-    display: none; 
-    position: absolute; 
-    right: 0; 
-    top: 40px; /* Adjusted position */
-    background: #2a2a2a; 
-    border: 1px solid #D4AF37; 
-    border-radius: 8px; 
-    padding: 15px; 
-    width: 200px; 
-    box-shadow: 0 8px 16px rgba(0,0,0,0.6); 
-    z-index: 9999; /* Make sure it's on top of everything */
-    text-align: left; 
-}
+            display: none; 
+            position: fixed; 
+            right: 20px; 
+            top: 80px; 
+            background: #2a2a2a; 
+            border: 1px solid #D4AF37; 
+            border-radius: 8px; 
+            padding: 15px; 
+            width: 200px; 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6); 
+            z-index: 9999; 
+            text-align: left; 
+        }
         .user-dropdown.active { display: block; }
 
         /* --- MAIN LAYOUT --- */
@@ -256,7 +255,6 @@
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'login.html'; return; }
 
-            // Display Email in Dropdown
             document.getElementById('userEmailDisplay').textContent = session.user.email;
 
             // 2. Check Role and Name from profiles table
@@ -289,8 +287,6 @@
             }
 
             // --- FETCH REAL DATA ---
-            
-            // Total Members (Filtered for Leaders)
             let memberQuery = supabaseClient.from('members').select('*', { count: 'exact', head: true });
             if (role === 'Leader') {
                 memberQuery = memberQuery.eq('assigned_leader', fullName);
@@ -298,17 +294,14 @@
             const { count: memberCount } = await memberQuery;
             document.getElementById('stat-members').textContent = memberCount || 0;
 
-            // First Timers this month
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
             const { count: visitorCount } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).gte('created_at', startOfMonth);
             document.getElementById('stat-visitors').textContent = visitorCount || 0;
 
-            // Today's Attendance
             const todayStr = now.toISOString().split('T')[0];
             const { count: attendanceToday } = await supabaseClient.from('attendance').select('*', { count: 'exact', head: true }).eq('service_date', todayStr).eq('status', 'Present');
             document.getElementById('stat-attendance').textContent = attendanceToday || 0;
 
-            // Pending Follow-ups
             const { count: pendingFollowups } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).eq('status', 'Pending');
             document.getElementById('stat-followups').textContent = pendingFollowups || 0;
 
@@ -388,17 +381,14 @@
             const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
             document.getElementById('latest-announcement').textContent = (announcements && announcements.length > 0) ? announcements[0].title : "No announcements yet";
 
-            // Hide Loading
             document.getElementById('loading').style.display = 'none';
         }
 
-        // Toggle User Dropdown
         function toggleUserMenu() {
             const dropdown = document.getElementById('userDropdown');
             dropdown.classList.toggle('active');
         }
 
-        // Show Notifications
         function showNotifications() {
             const pending = document.getElementById('stat-followups').textContent;
             if (pending > 0) {
@@ -408,7 +398,6 @@
             }
         }
 
-        // Close dropdown if clicked outside
         window.onclick = function(event) {
             if (!event.target.matches('.fa-user')) {
                 const dropdown = document.getElementById('userDropdown');
