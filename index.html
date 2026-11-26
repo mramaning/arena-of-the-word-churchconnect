@@ -406,15 +406,60 @@
                 }
             });
 
-            // 6. Birthdays this week (Requires date_of_birth column)
-            // For now, we will mock the birthday count since the column is new
-            document.getElementById('birthday-count').textContent = "0"; 
+            // 6. Calculate Birthdays this week
+const { data: allMembers } = await supabaseClient.from('members').select('first_name, last_name, date_of_birth');
 
-            // 7. Latest Announcement
-            const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
-            if (announcements && announcements.length > 0) {
-                document.getElementById('latest-announcement').textContent = announcements[0].title;
+let birthdayCount = 0;
+let birthdayNames = [];
+
+if (allMembers) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    
+    allMembers.forEach(m => {
+        if (m.date_of_birth) {
+            // Get the month and day of the birthday
+            const dob = new Date(m.date_of_birth);
+            const bdayThisYear = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
+            
+            // If the birthday already passed this year, check next year's date
+            if (bdayThisYear < today) {
+                bdayThisYear.setFullYear(today.getFullYear() + 1);
             }
+            
+            // Calculate difference in days
+            const diffTime = Math.abs(bdayThisYear - today);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            // If birthday is within the next 7 days (including today)
+            if (diffDays <= 7) {
+                birthdayCount++;
+                birthdayNames.push(`${m.first_name} ${m.last_name}`);
+            }
+        }
+    });
+}
+
+document.getElementById('birthday-count').textContent = birthdayCount;
+
+// If there are birthdays, show their names below the count
+if (birthdayCount > 0) {
+    const bdayDiv = document.createElement('div');
+    bdayDiv.style.fontSize = '12px';
+    bdayDiv.style.color = '#D4AF37';
+    bdayDiv.style.marginTop = '5px';
+    bdayDiv.style.textAlign = 'right';
+    bdayDiv.textContent = birthdayNames.join(', ');
+    document.getElementById('birthday-count').parentElement.appendChild(bdayDiv);
+}
+
+// 7. Latest Announcement
+const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
+if (announcements && announcements.length > 0) {
+    document.getElementById('latest-announcement').textContent = announcements[0].title;
+} else {
+    document.getElementById('latest-announcement').textContent = "No announcements yet";
+}
 
             // Hide Loading Screen
             document.getElementById('loading').style.display = 'none';
