@@ -20,87 +20,62 @@
         }
 
         /* --- GLASS HEADER --- */
-        .header-container { 
-            position: relative; 
-            width: 100%; 
-            padding: 15px 0; 
-            display: flex; 
-            justify-content: center; 
-            border-bottom: 3px solid #D4AF37; 
-        }
-        
-        .header-bg { 
-            position: absolute; 
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('logo.jpg'); 
-            background-size: cover; 
-            background-position: center; 
-            filter: blur(8px) brightness(0.3); 
-            z-index: 1; 
-        }
-        
-        .header-glass { 
-            position: relative; 
-            z-index: 2; 
-            background: rgba(26, 26, 26, 0.7); 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px); 
-            width: 90%; 
-            max-width: 800px; 
-            border-radius: 15px; 
-            border: 1px solid rgba(212, 175, 55, 0.3); 
-            padding: 15px 20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
-        }
-        
+        .header-container { position: relative; width: 100%; padding: 15px 0; display: flex; justify-content: center; border-bottom: 3px solid #D4AF37; }
+        .header-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('logo.jpg'); background-size: cover; background-position: center; filter: blur(8px) brightness(0.3); z-index: 1; }
+        .header-glass { position: relative; z-index: 2; background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.3); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
         .header-left { display: flex; align-items: center; gap: 15px; }
-        
-        .header-left img { 
-            width: 50px; height: 50px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; 
-        }
-        
+        .header-left img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
         .header-text h1 { margin: 0; font-size: 18px; color: #D4AF37; }
         .header-text p { margin: 3px 0 0 0; font-size: 11px; color: #E6E6FA; text-transform: uppercase; letter-spacing: 1.5px; }
-        
         .header-right { display: flex; align-items: center; gap: 20px; color: #D4AF37; font-size: 18px; position: relative; }
         .header-right i { cursor: pointer; transition: color 0.3s; }
         .header-right i:hover { color: white; }
 
-        /* --- FIXED USER DROPDOWN --- */
+        /* User Dropdown Menu */
         .user-menu-container { position: relative; }
-        .user-dropdown { 
-            display: none; 
-            position: absolute; 
-            right: 0; 
-            top: 35px; 
-            background: #2a2a2a; 
-            border: 1px solid #D4AF37; 
-            border-radius: 8px; 
-            padding: 15px; 
-            width: 200px; 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.8); 
-            z-index: 9999; 
-            text-align: left; 
-        }
+        .user-dropdown { display: none; position: absolute; right: 0; top: 35px; background: #2a2a2a; border: 1px solid #D4AF37; border-radius: 8px; padding: 15px; width: 200px; box-shadow: 0 8px 16px rgba(0,0,0,0.8); z-index: 9999; text-align: left; }
         .user-dropdown.active { display: block; }
 
         /* --- MAIN LAYOUT --- */
         .main-container { padding: 20px; max-width: 800px; margin: auto; }
-
-        /* --- WELCOME --- */
         .welcome-section { margin-bottom: 25px; }
         .welcome-section h2 { margin: 0 0 5px 0; color: #D4AF37; font-size: 24px; }
         .welcome-section p { margin: 0; color: #999; font-size: 14px; }
 
-        /* --- STATS GRID --- */
+        /* --- STATS GRID (Clickable Cards) --- */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
-        .stat-card i { position: absolute; right: 15px; top: 15px; font-size: 40px; color: rgba(75, 0, 130, 0.3); }
-        .stat-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .stat-value { font-size: 28px; font-weight: bold; color: #D4AF37; }
+        .stat-card { 
+            background: #2a2a2a; 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid #4B0082; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+            position: relative; 
+            overflow: hidden; 
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .stat-card:hover {
+            background: #3a3a3a;
+            border-color: #D4AF37;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(212, 175, 55, 0.2);
+        }
+        
+        /* NEW ICON STYLE: Visible Gold with Opacity */
+        .stat-card i { 
+            position: absolute; 
+            right: 15px; 
+            top: 15px; 
+            font-size: 40px; 
+            color: rgba(212, 175, 55, 0.15); /* Gold with low opacity so text is readable */
+            z-index: 0;
+        }
+        
+        .stat-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; position: relative; z-index: 1; }
+        .stat-value { font-size: 28px; font-weight: bold; color: #D4AF37; position: relative; z-index: 1; }
 
         /* --- NAVIGATION CARDS --- */
         .nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
@@ -154,27 +129,28 @@
             <p>Here is what is happening in the church today.</p>
         </div>
 
+        <!-- CLICKABLE STATS CARDS -->
         <div class="stats-grid">
-            <div class="stat-card">
+            <a href="members.html" class="stat-card">
                 <i class="fa-solid fa-users"></i>
                 <div class="stat-title" id="member-label">Total Members</div>
                 <div class="stat-value" id="stat-members">0</div>
-            </div>
-            <div class="stat-card">
+            </a>
+            <a href="attendance.html" class="stat-card">
                 <i class="fa-solid fa-clipboard-check"></i>
                 <div class="stat-title">Today's Attendance</div>
                 <div class="stat-value" id="stat-attendance">0</div>
-            </div>
-            <div class="stat-card">
+            </a>
+            <a href="first-timers.html" class="stat-card">
                 <i class="fa-solid fa-user-plus"></i>
                 <div class="stat-title">First Timers (Month)</div>
                 <div class="stat-value" id="stat-visitors">0</div>
-            </div>
-            <div class="stat-card">
+            </a>
+            <a href="follow-up.html" class="stat-card">
                 <i class="fa-solid fa-handshake-angle"></i>
                 <div class="stat-title">Pending Follow-ups</div>
                 <div class="stat-value" id="stat-followups">0</div>
-            </div>
+            </a>
         </div>
 
         <h3 class="section-title">Quick Actions</h3>
@@ -337,7 +313,7 @@
         }
 
         function toggleUserMenu(event) {
-            event.stopPropagation(); // Prevents the window click from immediately closing it
+            event.stopPropagation(); 
             const dropdown = document.getElementById('userDropdown');
             dropdown.classList.toggle('active');
         }
