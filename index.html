@@ -42,38 +42,11 @@
         .welcome-section h2 { margin: 0 0 5px 0; color: #D4AF37; font-size: 24px; }
         .welcome-section p { margin: 0; color: #999; font-size: 14px; }
 
-        /* --- STATS GRID (Clickable Cards) --- */
+        /* --- STATS GRID --- */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-card { 
-            background: #2a2a2a; 
-            padding: 20px; 
-            border-radius: 12px; 
-            border: 1px solid #4B0082; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
-            position: relative; 
-            overflow: hidden; 
-            text-decoration: none;
-            display: block;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .stat-card:hover {
-            background: #3a3a3a;
-            border-color: #D4AF37;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(212, 175, 55, 0.2);
-        }
-        
-        /* NEW ICON STYLE: Visible Gold with Opacity */
-        .stat-card i { 
-            position: absolute; 
-            right: 15px; 
-            top: 15px; 
-            font-size: 40px; 
-            color: rgba(212, 175, 55, 0.15); /* Gold with low opacity so text is readable */
-            z-index: 0;
-        }
-        
+        .stat-card { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; overflow: hidden; text-decoration: none; display: block; transition: all 0.3s ease; cursor: pointer; }
+        .stat-card:hover { background: #3a3a3a; border-color: #D4AF37; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(212, 175, 55, 0.2); }
+        .stat-card i { position: absolute; right: 15px; top: 15px; font-size: 40px; color: rgba(212, 175, 55, 0.15); z-index: 0; }
         .stat-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; position: relative; z-index: 1; }
         .stat-value { font-size: 28px; font-weight: bold; color: #D4AF37; position: relative; z-index: 1; }
 
@@ -92,6 +65,15 @@
         .list-icon { color: #D4AF37; }
 
         #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #D4AF37; font-size: 20px; font-weight: bold; }
+
+        /* --- MODAL FOR STAT NAMES --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; }
+        .modal-content { background: #2a2a2a; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid #D4AF37; max-height: 80vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #4B0082; padding-bottom: 10px; }
+        .modal-header h3 { margin: 0; color: #D4AF37; }
+        .close-btn { background: transparent; color: #d9534f; border: none; font-size: 20px; cursor: pointer; width: auto; padding: 0; margin: 0; box-shadow: none;}
+        .name-list-item { padding: 10px 0; border-bottom: 1px solid #333; font-size: 14px; color: #E6E6FA; }
+        .name-list-item:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
@@ -110,7 +92,6 @@
             </div>
             <div class="header-right">
                 <i class="fa-regular fa-bell" onclick="showNotifications()" title="Notifications"></i>
-                
                 <div class="user-menu-container">
                     <i class="fa-regular fa-user" onclick="toggleUserMenu(event)" title="Profile"></i>
                     <div class="user-dropdown" id="userDropdown">
@@ -131,26 +112,26 @@
 
         <!-- CLICKABLE STATS CARDS -->
         <div class="stats-grid">
-            <a href="members.html" class="stat-card">
+            <div class="stat-card" onclick="openStatModal('members')">
                 <i class="fa-solid fa-users"></i>
                 <div class="stat-title" id="member-label">Total Members</div>
                 <div class="stat-value" id="stat-members">0</div>
-            </a>
-            <a href="attendance.html" class="stat-card">
+            </div>
+            <div class="stat-card" onclick="openStatModal('attendance')">
                 <i class="fa-solid fa-clipboard-check"></i>
                 <div class="stat-title">Today's Attendance</div>
                 <div class="stat-value" id="stat-attendance">0</div>
-            </a>
-            <a href="first-timers.html" class="stat-card">
+            </div>
+            <div class="stat-card" onclick="openStatModal('visitors')">
                 <i class="fa-solid fa-user-plus"></i>
                 <div class="stat-title">First Timers (Month)</div>
                 <div class="stat-value" id="stat-visitors">0</div>
-            </a>
-            <a href="follow-up.html" class="stat-card">
+            </div>
+            <div class="stat-card" onclick="openStatModal('followups')">
                 <i class="fa-solid fa-handshake-angle"></i>
                 <div class="stat-title">Pending Follow-ups</div>
                 <div class="stat-value" id="stat-followups">0</div>
-            </a>
+            </div>
         </div>
 
         <h3 class="section-title">Quick Actions</h3>
@@ -181,10 +162,28 @@
 
     </div>
 
+    <!-- THE MODAL -->
+    <div class="modal" id="statModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Names</h3>
+                <button class="close-btn" onclick="closeStatModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="modalBody">
+                <!-- Names will be injected here -->
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Store data globally so the modal can read it without fetching again
+        let dashboardData = { members: [], attendance: [], visitors: [], followups: [] };
+        let currentUserRole = 'Leader';
+        let currentUserName = '';
 
         async function loadDashboard() {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -194,12 +193,12 @@
 
             const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
             
-            let role = 'Leader'; 
-            let fullName = session.user.email.split('@')[0]; 
+            currentUserRole = 'Leader'; 
+            currentUserName = session.user.email.split('@')[0]; 
 
             if (profile) {
-                role = profile.role;
-                fullName = profile.full_name || fullName;
+                currentUserRole = profile.role;
+                currentUserName = profile.full_name || currentUserName;
             }
 
             const now = new Date();
@@ -211,44 +210,48 @@
             if (hour < 12) greetingText = "Good Morning";
             else if (hour < 18) greetingText = "Good Afternoon";
             
-            document.getElementById('greeting').textContent = `${greetingText}, ${fullName}`;
+            document.getElementById('greeting').textContent = `${greetingText}, ${currentUserName}`;
 
-            if (role === 'Leader') {
+            if (currentUserRole === 'Leader') {
                 document.getElementById('nav-announcements').style.display = 'none'; 
                 document.getElementById('member-label').textContent = 'My Members'; 
             }
 
-            let memberQuery = supabaseClient.from('members').select('*', { count: 'exact', head: true });
-            if (role === 'Leader') {
-                memberQuery = memberQuery.eq('assigned_leader', fullName);
+            // FETCH MEMBERS
+            let memberQuery = supabaseClient.from('members').select('*');
+            if (currentUserRole === 'Leader') {
+                memberQuery = memberQuery.eq('assigned_leader', currentUserName);
             }
-            const { count: memberCount } = await memberQuery;
-            document.getElementById('stat-members').textContent = memberCount || 0;
+            const { data: memberData } = await memberQuery;
+            dashboardData.members = memberData || [];
+            document.getElementById('stat-members').textContent = dashboardData.members.length;
 
-            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-            const { count: visitorCount } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).gte('created_at', startOfMonth);
-            document.getElementById('stat-visitors').textContent = visitorCount || 0;
-
+            // FETCH ATTENDANCE (Today)
             const todayStr = now.toISOString().split('T')[0];
-            const { count: attendanceToday } = await supabaseClient.from('attendance').select('*', { count: 'exact', head: true }).eq('service_date', todayStr).eq('status', 'Present');
-            document.getElementById('stat-attendance').textContent = attendanceToday || 0;
+            const { data: attData } = await supabaseClient.from('attendance').select('*').eq('service_date', todayStr).eq('status', 'Present');
+            dashboardData.attendance = attData || [];
+            document.getElementById('stat-attendance').textContent = dashboardData.attendance.length;
 
-            const { count: pendingFollowups } = await supabaseClient.from('first_timers').select('*', { count: 'exact', head: true }).eq('status', 'Pending');
-            document.getElementById('stat-followups').textContent = pendingFollowups || 0;
+            // FETCH VISITORS (This Month)
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+            const { data: visData } = await supabaseClient.from('first_timers').select('*').gte('created_at', startOfMonth);
+            dashboardData.visitors = visData || [];
+            document.getElementById('stat-visitors').textContent = dashboardData.visitors.length;
 
-            const { data: attendanceData } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
-            
-            const chartLabels = [];
-            const chartData = [];
-            const groupedDates = {};
-            
-            if (attendanceData) {
-                attendanceData.forEach(record => {
-                    groupedDates[record.service_date] = (groupedDates[record.service_date] || 0) + 1;
-                });
+            // FETCH PENDING FOLLOW-UPS
+            const { data: folData } = await supabaseClient.from('first_timers').select('*').eq('status', 'Pending');
+            dashboardData.followups = folData || [];
+            document.getElementById('stat-followups').textContent = dashboardData.followups.length;
+
+
+            // --- CHART & OTHER LOGIC ---
+            const { data: chartData } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
+            const chartLabels = []; const chartCounts = []; const groupedDates = {};
+            if (chartData) {
+                chartData.forEach(record => { groupedDates[record.service_date] = (groupedDates[record.service_date] || 0) + 1; });
                 Object.keys(groupedDates).slice(-5).forEach(date => {
                     chartLabels.push(new Date(date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' }));
-                    chartData.push(groupedDates[date]);
+                    chartCounts.push(groupedDates[date]);
                 });
             }
 
@@ -257,29 +260,12 @@
                 type: 'line',
                 data: {
                     labels: chartLabels.length ? chartLabels : ['No Data'],
-                    datasets: [{
-                        label: 'Attendance',
-                        data: chartData.length ? chartData : [0],
-                        borderColor: '#D4AF37',
-                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#4B0082',
-                        pointBorderColor: '#D4AF37'
-                    }]
+                    datasets: [{ label: 'Attendance', data: chartCounts.length ? chartCounts : [0], borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#4B0082', pointBorderColor: '#D4AF37' }]
                 },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#999' } },
-                        x: { grid: { display: false }, ticks: { color: '#999' } }
-                    }
-                }
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#999' } }, x: { grid: { display: false }, ticks: { color: '#999' } } } }
             });
 
-            const { data: allMembers } = await supabaseClient.from('members').select('first_name, last_name, date_of_birth');
+            const { data: allMembers } = await supabaseClient.from('members').select('first_name, date_of_birth');
             let birthdayCount = 0; let birthdayNames = [];
             if (allMembers) {
                 const today = new Date(); today.setHours(0,0,0,0);
@@ -288,12 +274,8 @@
                         const dob = new Date(m.date_of_birth);
                         const bdayThisYear = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
                         if (bdayThisYear < today) bdayThisYear.setFullYear(today.getFullYear() + 1);
-                        const diffTime = Math.abs(bdayThisYear - today);
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        if (diffDays <= 7) {
-                            birthdayCount++;
-                            birthdayNames.push(`${m.first_name}`);
-                        }
+                        const diffDays = Math.ceil(Math.abs(bdayThisYear - today) / (1000 * 60 * 60 * 24));
+                        if (diffDays <= 7) { birthdayCount++; birthdayNames.push(m.first_name); }
                     }
                 });
             }
@@ -312,6 +294,51 @@
             document.getElementById('loading').style.display = 'none';
         }
 
+        // --- MODAL LOGIC ---
+        window.openStatModal = function(type) {
+            const modal = document.getElementById('statModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            body.innerHTML = ''; // Clear old data
+            
+            if (type === 'members') {
+                title.textContent = currentUserRole === 'Leader' ? 'My Members' : 'All Members';
+                if (dashboardData.members.length === 0) body.innerHTML = '<p style="color:#999;">No members found.</p>';
+                dashboardData.members.forEach(m => {
+                    body.innerHTML += `<div class="name-list-item">${m.first_name} ${m.last_name}</div>`;
+                });
+            } 
+            else if (type === 'attendance') {
+                title.textContent = "Today's Attendance";
+                if (dashboardData.attendance.length === 0) body.innerHTML = '<p style="color:#999;">No attendance recorded for today yet.</p>';
+                dashboardData.attendance.forEach(a => {
+                    body.innerHTML += `<div class="name-list-item">${a.member_name}</div>`;
+                });
+            }
+            else if (type === 'visitors') {
+                title.textContent = "First Timers This Month";
+                if (dashboardData.visitors.length === 0) body.innerHTML = '<p style="color:#999;">No first timers this month.</p>';
+                dashboardData.visitors.forEach(v => {
+                    body.innerHTML += `<div class="name-list-item">${v.first_name} ${v.last_name}</div>`;
+                });
+            }
+            else if (type === 'followups') {
+                title.textContent = "Pending Follow-ups";
+                if (dashboardData.followups.length === 0) body.innerHTML = '<p style="color:#999;">No pending follow-ups. Good job!</p>';
+                dashboardData.followups.forEach(f => {
+                    body.innerHTML += `<div class="name-list-item">${f.first_name} ${f.last_name} <br><span style="font-size:11px; color:#D4AF37;">Phone: ${f.phone || 'N/A'}</span></div>`;
+                });
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        window.closeStatModal = function() {
+            document.getElementById('statModal').style.display = 'none';
+        }
+
+        // --- UI TOGGLES ---
         function toggleUserMenu(event) {
             event.stopPropagation(); 
             const dropdown = document.getElementById('userDropdown');
@@ -320,18 +347,15 @@
 
         function showNotifications() {
             const pending = document.getElementById('stat-followups').textContent;
-            if (pending > 0) {
-                alert(`You have ${pending} pending follow-ups! Check the Follow-Up page.`);
-            } else {
-                alert("No new notifications. You are all caught up!");
-            }
+            if (pending > 0) alert(`You have ${pending} pending follow-ups!`);
+            else alert("No new notifications.");
         }
 
         window.onclick = function(event) {
             const dropdown = document.getElementById('userDropdown');
-            if (dropdown && dropdown.classList.contains('active')) {
-                dropdown.classList.remove('active');
-            }
+            if (dropdown && dropdown.classList.contains('active')) dropdown.classList.remove('active');
+            const modal = document.getElementById('statModal');
+            if (event.target === modal) modal.style.display = 'none';
         }
 
         async function logout() {
