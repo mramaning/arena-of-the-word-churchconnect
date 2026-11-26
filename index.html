@@ -11,26 +11,111 @@
 
     <style>
         /* --- BASE STYLES --- */
-        body { background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #E6E6FA; }
+        body { 
+            background-color: #1a1a1a; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            color: #E6E6FA; 
+        }
 
         /* --- GLASS HEADER --- */
-        .header-container { position: relative; width: 100%; padding: 15px 0; overflow: hidden; display: flex; justify-content: center; border-bottom: 3px solid #D4AF37; }
-        .header-bg { position: absolute; top: -20px; left: -20px; width: calc(100% + 40px); height: calc(100% + 40px); background-image: url('logo.jpg'); background-size: cover; background-position: center; filter: blur(8px) brightness(0.3); z-index: 1; }
-        .header-glass { position: relative; z-index: 2; background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); width: 90%; max-width: 800px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.3); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .header-left img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
-        .header-text h1 { margin: 0; font-size: 18px; color: #D4AF37; }
-        .header-text p { margin: 3px 0 0 0; font-size: 11px; color: #E6E6FA; text-transform: uppercase; letter-spacing: 1.5px; }
-        .header-right { display: flex; align-items: center; gap: 15px; color: #D4AF37; font-size: 18px; }
-        .header-right i { cursor: pointer; transition: color 0.3s; }
-        .header-right i:hover { color: white; }
+        .header-container { 
+            position: relative; 
+            width: 100%; 
+            padding: 15px 0; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            border-bottom: 3px solid #D4AF37; 
+        }
+        
+        .header-bg { 
+            position: absolute; 
+            top: -20px; 
+            left: -20px; 
+            width: calc(100% + 40px); 
+            height: calc(100% + 40px); 
+            background-image: url('logo.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            filter: blur(8px) brightness(0.3); 
+            z-index: 1; 
+        }
+        
+        .header-glass { 
+            position: relative; 
+            z-index: 2; 
+            background: rgba(26, 26, 26, 0.7); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px); 
+            width: 90%; 
+            max-width: 800px; 
+            border-radius: 15px; 
+            border: 1px solid rgba(212, 175, 55, 0.3); 
+            padding: 15px 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
+        }
+        
+        .header-left { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+        
+        .header-left img { 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            border: 2px solid #D4AF37; 
+            object-fit: cover; 
+        }
+        
+        .header-text h1 { 
+            margin: 0; 
+            font-size: 18px; 
+            color: #D4AF37; 
+        }
+        
+        .header-text p { 
+            margin: 3px 0 0 0; 
+            font-size: 11px; 
+            color: #E6E6FA; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+        }
+        
+        .header-right { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            color: #D4AF37; 
+            font-size: 18px; 
+        }
+        
+        .header-right i { 
+            cursor: pointer; 
+            transition: color 0.3s; 
+        }
+        
+        .header-right i:hover { 
+            color: white; 
+        }
+
         /* User Dropdown Menu */
-.user-menu-container { position: relative; display: inline-block; }
-.user-dropdown { display: none; position: absolute; right: 0; top: 30px; background: #2a2a2a; border: 1px solid #D4AF37; border-radius: 8px; padding: 15px; width: 200px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 100; text-align: left; }
-.user-dropdown.active { display: block; }
+        .user-menu-container { position: relative; display: inline-block; }
+        .user-dropdown { display: none; position: absolute; right: 0; top: 30px; background: #2a2a2a; border: 1px solid #D4AF37; border-radius: 8px; padding: 15px; width: 200px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 100; text-align: left; }
+        .user-dropdown.active { display: block; }
 
         /* --- MAIN LAYOUT --- */
-        .main-container { padding: 20px; max-width: 800px; margin: auto; }
+        .main-container { 
+            padding: 20px; 
+            max-width: 800px; 
+            margin: auto; 
+        }
 
         /* --- WELCOME --- */
         .welcome-section { margin-bottom: 25px; }
@@ -75,29 +160,27 @@
                     <p id="currentDateDisplay">Loading Date...</p>
                 </div>
             </div>
-       <div class="header-right">
-    <!-- Notification Bell -->
-    <i class="fa-regular fa-bell" onclick="showNotifications()" title="Notifications"></i>
-    
-    <!-- User Icon with Dropdown -->
-    <div class="user-menu-container">
-        <i class="fa-regular fa-user" onclick="toggleUserMenu()" title="Profile"></i>
-        <div class="user-dropdown" id="userDropdown">
-            <p id="userEmailDisplay" style="font-size: 12px; margin: 0 0 10px 0; color: #999;">Loading...</p>
-            <button onclick="logout()" style="background: #d9534f; color: white; border: none; padding: 8px; border-radius: 5px; font-size: 12px; cursor: pointer; width: 100%;">Logout</button>
+            <div class="header-right">
+                <i class="fa-regular fa-bell" onclick="showNotifications()" title="Notifications"></i>
+                
+                <div class="user-menu-container">
+                    <i class="fa-regular fa-user" onclick="toggleUserMenu()" title="Profile"></i>
+                    <div class="user-dropdown" id="userDropdown">
+                        <p id="userEmailDisplay" style="font-size: 12px; margin: 0 0 10px 0; color: #999;">Loading...</p>
+                        <button onclick="logout()" style="background: #d9534f; color: white; border: none; padding: 8px; border-radius: 5px; font-size: 12px; cursor: pointer; width: 100%;">Logout</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="main-container">
         
-        <!-- WELCOME -->
         <div class="welcome-section">
             <h2 id="greeting">Loading...</h2>
             <p>Here is what is happening in the church today.</p>
         </div>
 
-        <!-- STATISTICS -->
         <div class="stats-grid">
             <div class="stat-card">
                 <i class="fa-solid fa-users"></i>
@@ -121,24 +204,20 @@
             </div>
         </div>
 
-        <!-- NAVIGATION -->
         <h3 class="section-title">Quick Actions</h3>
         <div class="nav-grid">
             <a href="members.html" class="nav-card"><i class="fa-solid fa-address-book"></i>Members</a>
             <a href="attendance.html" class="nav-card"><i class="fa-solid fa-clipboard-user"></i>Attendance</a>
             <a href="first-timers.html" class="nav-card"><i class="fa-solid fa-user-plus"></i>First Timers</a>
             <a href="follow-up.html" class="nav-card"><i class="fa-solid fa-handshake-angle"></i>Follow-Up</a>
-            <!-- Announcements card will be hidden for Leaders -->
             <a href="announcements.html" class="nav-card" id="nav-announcements" style="grid-column: span 2;"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
         </div>
 
-        <!-- ANALYTICS -->
         <h3 class="section-title">Attendance Analytics</h3>
         <div class="chart-container">
             <canvas id="attendanceChart"></canvas>
         </div>
 
-        <!-- UPCOMING & ACTIVITIES -->
         <h3 class="section-title">Upcoming & Activities</h3>
         <div class="list-container">
             <div class="list-item">
@@ -163,11 +242,14 @@
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'login.html'; return; }
 
+            // Display Email in Dropdown
+            document.getElementById('userEmailDisplay').textContent = session.user.email;
+
             // 2. Check Role and Name from profiles table
             const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
             
-            let role = 'Leader'; // Default to Leader
-            let fullName = session.user.email.split('@')[0]; // Fallback name
+            let role = 'Leader'; 
+            let fullName = session.user.email.split('@')[0]; 
 
             if (profile) {
                 role = profile.role;
@@ -185,15 +267,15 @@
             else if (hour < 18) greetingText = "Good Afternoon";
             
             document.getElementById('greeting').textContent = `${greetingText}, ${fullName}`;
-            document.getElementById('userEmailDisplay').textContent = session.user.email;
 
             // 3. Adjust UI based on Role
             if (role === 'Leader') {
-                document.getElementById('nav-announcements').style.display = 'none'; // Hide announcements
-                document.getElementById('member-label').textContent = 'My Members'; // Change label
+                document.getElementById('nav-announcements').style.display = 'none'; 
+                document.getElementById('member-label').textContent = 'My Members'; 
             }
 
             // --- FETCH REAL DATA ---
+            
             // Total Members (Filtered for Leaders)
             let memberQuery = supabaseClient.from('members').select('*', { count: 'exact', head: true });
             if (role === 'Leader') {
@@ -296,37 +378,38 @@
             document.getElementById('loading').style.display = 'none';
         }
 
+        // Toggle User Dropdown
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Show Notifications
+        function showNotifications() {
+            const pending = document.getElementById('stat-followups').textContent;
+            if (pending > 0) {
+                alert(`You have ${pending} pending follow-ups! Check the Follow-Up page.`);
+            } else {
+                alert("No new notifications. You are all caught up!");
+            }
+        }
+
+        // Close dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.fa-user')) {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown && dropdown.classList.contains('active')) {
+                    dropdown.classList.remove('active');
+                }
+            }
+        }
+
         async function logout() {
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
         }
 
         loadDashboard();
-        // Toggle User Dropdown
-function toggleUserMenu() {
-    const dropdown = document.getElementById('userDropdown');
-    dropdown.classList.toggle('active');
-}
-
-// Show Notifications (Simple Alert for now)
-function showNotifications() {
-    const pending = document.getElementById('stat-followups').textContent;
-    if (pending > 0) {
-        alert(`You have ${pending} pending follow-ups! Check the Follow-Up page.`);
-    } else {
-        alert("No new notifications. You are all caught up!");
-    }
-}
-
-// Close dropdown if clicked outside
-window.onclick = function(event) {
-    if (!event.target.matches('.fa-user')) {
-        const dropdown = document.getElementById('userDropdown');
-        if (dropdown && dropdown.classList.contains('active')) {
-            dropdown.classList.remove('active');
-        }
-    }
-}
     </script>
 </body>
 </html>
