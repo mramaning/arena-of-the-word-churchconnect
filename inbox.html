@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Inbox - Word Arena</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; margin: 0; padding: 20px; color: #E6E6FA; }
+        .header-container { position: relative; width: 100%; height: 120px; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 3px solid #D4AF37; margin-bottom: 20px; }
+        .header-bg { position: absolute; top: -20px; left: -20px; width: calc(100% + 40px); height: calc(100% + 40px); background-image: url('logo.jpg'); background-size: cover; background-position: center; filter: blur(8px) brightness(0.4); z-index: 1; }
+        .header-glass { position: relative; z-index: 2; background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .header-glass h2 { margin: 0; font-size: 18px; color: #D4AF37; }
+        .back-btn { color: #E6E6FA; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .back-btn:hover { color: #D4AF37; }
+        
+        .container { max-width: 600px; margin: auto; }
+        .message-card { background: #2a2a2a; border: 1px solid #4B0082; border-left: 5px solid #D4AF37; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .msg-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; color: #999; }
+        .msg-sender { font-weight: bold; color: #D4AF37; font-size: 14px; }
+        .msg-body { font-size: 15px; color: #E6E6FA; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-bg"></div>
+        <div class="header-glass">
+            <a href="index.html" class="back-btn">← Dashboard</a>
+            <h2>My Inbox</h2>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="inboxList">
+            <p>Loading messages...</p>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://jicllwruxiyzdpkejtaq.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_fXcxoM2F0834DkoaiVEgNw_dmveYxmv';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function loadInbox() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'login.html'; return; }
+
+            const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
+            let role = profile ? profile.role : 'Member';
+            let name = profile ? profile.full_name : session.user.email;
+
+            // Only Pastor, Secretary, and Leaders can see this
+            if (role === 'Member') {
+                alert("Access Denied");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const list = document.getElementById('inboxList');
+            
+            // Pastors and Secretaries see messages to "Pastor". Leaders see messages to their own name.
+            let query = supabaseClient.from('messages').select('*').order('created_at', { ascending: false });
+            if (role === 'Leader') {
+                query = query.eq('recipient', name);
+            } else {
+                query = query.eq('recipient', 'Pastor');
+            }
+
+            const { data, error } = await query;
+
+            if (error || data.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#999; margin-top:50px;">No messages yet.</p>';
+                return;
+            }
+
+            list.innerHTML = '';
+            data.forEach(msg => {
+                const date = new Date(msg.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
+                list.innerHTML += `
+                    <div class="message-card">
+                        <div class="msg-header">
+                            <span class="msg-sender">From: ${msg.sender_name}</span>
+                            <span>${date}</span>
+                        </div>
+                        <div class="msg-body">${msg.message}</div>
+                    </div>
+                `;
+            });
+        }
+        loadInbox();
+    </script>
+</body>
+</html>

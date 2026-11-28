@@ -28,30 +28,45 @@
         .welcome-section { margin-bottom: 25px; }
         .welcome-section h2 { margin: 0 0 5px 0; color: #D4AF37; font-size: 24px; }
         .welcome-section p { margin: 0; color: #999; font-size: 14px; }
+        
+        /* Admin Stats */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-card { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; overflow: hidden; text-decoration: none; display: block; transition: all 0.3s ease; cursor: pointer; }
-        .stat-card:hover { background: #3a3a3a; border-color: #D4AF37; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(212, 175, 55, 0.2); }
-        .stat-card i { position: absolute; right: 15px; top: 15px; font-size: 40px; color: rgba(212, 175, 55, 0.15); z-index: 0; }
-        .stat-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; position: relative; z-index: 1; }
-        .stat-value { font-size: 28px; font-weight: bold; color: #D4AF37; position: relative; z-index: 1; }
+        .stat-card { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; box-shadow: 0 4px 6px rgba(0,0,0,0.3); position: relative; overflow: hidden; cursor: pointer; }
+        .stat-card i { position: absolute; right: 15px; top: 15px; font-size: 40px; color: rgba(212, 175, 55, 0.15); }
+        .stat-title { font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 10px; }
+        .stat-value { font-size: 28px; font-weight: bold; color: #D4AF37; }
+
+        /* Navigation */
         .nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
         .nav-card { background: #2a2a2a; padding: 15px; border-radius: 12px; text-align: center; text-decoration: none; color: #D4AF37; font-weight: bold; border: 1px solid #4B0082; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 90px; transition: all 0.3s ease; }
         .nav-card:hover { background: #3a3a3a; border-color: #D4AF37; transform: translateY(-2px); }
         .nav-card i { font-size: 24px; margin-bottom: 10px; }
+
+        /* General Layouts */
         .section-title { color: #D4AF37; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #4B0082; padding-bottom: 10px; }
         .chart-container, .list-container { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; margin-bottom: 30px; }
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #333; }
         .list-item:last-child { border-bottom: none; }
         .list-item-left { display: flex; align-items: center; gap: 10px; }
         .list-icon { color: #D4AF37; }
+
+        /* Member Specific Styles */
+        .verse-box { background: linear-gradient(135deg, #2a004d 0%, #1a1a1a 100%); border: 1px solid #D4AF37; border-radius: 12px; padding: 25px; text-align: center; margin-bottom: 30px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); }
+        .verse-text { font-size: 18px; font-style: italic; color: #E6E6FA; margin-bottom: 10px; line-height: 1.6; }
+        .verse-ref { font-size: 14px; color: #D4AF37; font-weight: bold; }
+        
+        .message-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .message-box { background: #2a2a2a; padding: 20px; border-radius: 12px; border: 1px solid #4B0082; }
+        .message-box h4 { color: #D4AF37; margin-top: 0; margin-bottom: 15px; }
+        textarea { width: 100%; padding: 10px; border: 1px solid #4B0082; border-radius: 5px; background: #1a1a1a; color: white; font-family: inherit; height: 80px; resize: vertical; margin-bottom: 10px; box-sizing: border-box;}
+        .btn-send { background: #4B0082; color: #D4AF37; border: 1px solid #D4AF37; padding: 8px; font-weight: bold; cursor: pointer; border-radius: 5px; width: 100%; }
+        
         #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a1a; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #D4AF37; font-size: 20px; font-weight: bold; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; }
         .modal-content { background: #2a2a2a; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid #D4AF37; max-height: 80vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #4B0082; padding-bottom: 10px; }
-        .modal-header h3 { margin: 0; color: #D4AF37; }
-        .close-btn { background: transparent; color: #d9534f; border: none; font-size: 20px; cursor: pointer; width: auto; padding: 0; margin: 0; box-shadow: none;}
+        .close-btn { background: transparent; color: #d9534f; border: none; font-size: 20px; cursor: pointer; width: auto; }
         .name-list-item { padding: 10px 0; border-bottom: 1px solid #333; font-size: 14px; color: #E6E6FA; }
-        .name-list-item:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
@@ -73,8 +88,8 @@
                 <div class="user-menu-container">
                     <i class="fa-regular fa-user" onclick="toggleUserMenu(event)" title="Profile"></i>
                     <div class="user-dropdown" id="userDropdown">
-                        <p id="userEmailDisplay" style="font-size: 12px; margin: 0 0 10px 0; color: #999;">Loading...</p>
-                        <p id="userRoleDisplay" style="font-size: 11px; margin: 0 0 10px 0; color: #D4AF37;">Role: Loading</p>
+                        <p id="userEmailDisplay" style="font-size: 12px; color: #999;">Loading...</p>
+                        <p id="userRoleDisplay" style="font-size: 11px; color: #D4AF37; margin-bottom: 10px;">Role: Loading</p>
                         <button onclick="logout()" style="background: #d9534f; color: white; border: none; padding: 8px; border-radius: 5px; font-size: 12px; cursor: pointer; width: 100%;">Logout</button>
                     </div>
                 </div>
@@ -85,63 +100,92 @@
     <div class="main-container">
         <div class="welcome-section">
             <h2 id="greeting">Loading...</h2>
-            <p>Here is what is happening in the church today.</p>
+            <p id="sub-greeting">Here is what is happening in the church today.</p>
         </div>
 
-        <!-- STATS CARDS -->
-        <div class="stats-grid">
-            <div class="stat-card" onclick="openStatModal('members')">
-                <i class="fa-solid fa-users"></i>
-                <div class="stat-title">Total Members</div>
-                <div class="stat-value" id="stat-members">0</div>
+        <!-- ========================================== -->
+        <!-- ADMIN VIEW (Pastor, Secretary, Leader)     -->
+        <!-- ========================================== -->
+        <div id="admin-view" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card" onclick="openStatModal('members')">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="stat-title">Total Members</div>
+                    <div class="stat-value" id="stat-members">0</div>
+                </div>
+                <div class="stat-card" onclick="openStatModal('attendance')">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                    <div class="stat-title">Today's Attendance</div>
+                    <div class="stat-value" id="stat-attendance">0</div>
+                </div>
+                <div class="stat-card" onclick="openStatModal('visitors')">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <div class="stat-title">First Timers (Month)</div>
+                    <div class="stat-value" id="stat-visitors">0</div>
+                </div>
+                <div class="stat-card" onclick="openStatModal('followups')">
+                    <i class="fa-solid fa-handshake-angle"></i>
+                    <div class="stat-title">Pending Follow-ups</div>
+                    <div class="stat-value" id="stat-followups">0</div>
+                </div>
             </div>
-            <div class="stat-card" onclick="openStatModal('attendance')">
-                <i class="fa-solid fa-clipboard-check"></i>
-                <div class="stat-title">Today's Attendance</div>
-                <div class="stat-value" id="stat-attendance">0</div>
-            </div>
-            <div class="stat-card" onclick="openStatModal('visitors')">
-                <i class="fa-solid fa-user-plus"></i>
-                <div class="stat-title">First Timers (Month)</div>
-                <div class="stat-value" id="stat-visitors">0</div>
-            </div>
-            <div class="stat-card" onclick="openStatModal('followups')">
-                <i class="fa-solid fa-handshake-angle"></i>
-                <div class="stat-title">Pending Follow-ups</div>
-                <div class="stat-value" id="stat-followups">0</div>
-            </div>
-        </div>
 
-        <!-- QUICK ACTIONS -->
-        <h3 class="section-title">Quick Actions</h3>
-        <div class="nav-grid">
-            <a href="members.html" class="nav-card"><i class="fa-solid fa-address-book"></i>Members</a>
-            
-            <a href="attendance.html" class="nav-card" id="nav-attendance"><i class="fa-solid fa-clipboard-user"></i>Take Attendance</a>
-            <a href="first-timers.html" class="nav-card" id="nav-first-timers"><i class="fa-solid fa-user-plus"></i>Register Visitor</a>
-            
-            <a href="follow-up.html" class="nav-card" id="nav-follow-up"><i class="fa-solid fa-handshake-angle"></i>Follow-Up</a>
-            
-            <a href="announcements.html" class="nav-card" id="nav-announcements" style="grid-column: span 2;"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
-        </div>
-
-        <!-- CHARTS -->
-        <div id="analytics-section">
-            <h3 class="section-title" id="chart-title-1">Church Attendance Analytics</h3>
-            <div class="chart-container" id="chart-container-1">
-                <canvas id="attendanceChart1"></canvas>
+            <h3 class="section-title">Quick Actions</h3>
+            <div class="nav-grid">
+                <a href="members.html" class="nav-card"><i class="fa-solid fa-address-book"></i>Members</a>
+                <a href="attendance.html" class="nav-card" id="nav-attendance"><i class="fa-solid fa-clipboard-user"></i>Take Attendance</a>
+                <a href="first-timers.html" class="nav-card" id="nav-first-timers"><i class="fa-solid fa-user-plus"></i>Register Visitor</a>
+                <a href="follow-up.html" class="nav-card" id="nav-follow-up"><i class="fa-solid fa-handshake-angle"></i>Follow-Up</a>
+                <a href="inbox.html" class="nav-card" id="nav-inbox" style="grid-column: span 2; border-color: #D4AF37;"><i class="fa-solid fa-envelope"></i>My Inbox</a>
+                <a href="announcements.html" class="nav-card" id="nav-announcements" style="grid-column: span 2;"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
             </div>
-            
-            <div id="leader-church-chart-container" style="display:none;">
-                <h3 class="section-title">My Members Attendance</h3>
-                <div class="chart-container">
-                    <canvas id="attendanceChart2"></canvas>
+
+            <div id="analytics-section">
+                <h3 class="section-title" id="chart-title-1">Church Attendance Analytics</h3>
+                <div class="chart-container"><canvas id="attendanceChart1"></canvas></div>
+                <div id="leader-church-chart-container" style="display:none;">
+                    <h3 class="section-title">My Members Attendance</h3>
+                    <div class="chart-container"><canvas id="attendanceChart2"></canvas></div>
                 </div>
             </div>
         </div>
 
-        <!-- UPCOMING -->
-        <h3 class="section-title">Upcoming & Activities</h3>
+        <!-- ========================================== -->
+        <!-- MEMBER VIEW (Regular Members)              -->
+        <!-- ========================================== -->
+        <div id="member-view" style="display: none;">
+            <!-- Daily Verse -->
+            <div class="verse-box">
+                <div class="verse-text" id="verse-text">"Loading verse..."</div>
+                <div class="verse-ref" id="verse-ref">- Loading</div>
+            </div>
+
+            <!-- Direct Messages -->
+            <h3 class="section-title">Direct Messages</h3>
+            <div class="message-grid">
+                <div class="message-box">
+                    <h4><i class="fa-solid fa-user-tie"></i> Message My Leader</h4>
+                    <p style="font-size: 12px; color: #999; margin-bottom: 10px;">Leader: <span id="my-leader-name" style="color: #D4AF37;">Loading...</span></p>
+                    <textarea id="msg-leader" placeholder="Type your message to your leader..."></textarea>
+                    <button class="btn-send" onclick="sendMessage('leader')">Send to Leader</button>
+                </div>
+                <div class="message-box">
+                    <h4><i class="fa-solid fa-church"></i> Message The Pastor</h4>
+                    <p style="font-size: 12px; color: #999; margin-bottom: 10px;">Send a prayer request or concern.</p>
+                    <textarea id="msg-pastor" placeholder="Type your message to the Pastor..."></textarea>
+                    <button class="btn-send" onclick="sendMessage('pastor')">Send to Pastor</button>
+                </div>
+            </div>
+
+            <!-- Member Quick Actions -->
+            <h3 class="section-title">Church Life</h3>
+            <div class="nav-grid">
+                <a href="announcements.html" class="nav-card" style="grid-column: span 2;"><i class="fa-solid fa-bullhorn"></i>Read Announcements</a>
+            </div>
+        </div>
+
+        <!-- UPCOMING (Visible to everyone) -->
+        <h3 class="section-title" style="margin-top: 30px;">Upcoming & Activities</h3>
         <div class="list-container">
             <div class="list-item">
                 <div class="list-item-left"><i class="fa-solid fa-cake-candles list-icon"></i> Birthdays this week</div>
@@ -173,96 +217,78 @@
         let dashboardData = { members: [], attendance: [], visitors: [], followups: [] };
         let currentUserRole = 'Member';
         let currentUserName = '';
-        let churchTotalToday = 0;
+        let userLeaderName = '';
 
         async function loadDashboard() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'login.html'; return; }
 
             document.getElementById('userEmailDisplay').textContent = session.user.email;
-
+            
+            // Get Profile
             const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', session.user.id).single();
             currentUserRole = profile ? profile.role : 'Member'; 
             currentUserName = profile && profile.full_name ? profile.full_name : session.user.email.split('@')[0]; 
             document.getElementById('userRoleDisplay').textContent = `Role: ${currentUserRole}`;
 
-            // --- UI RESTRICTIONS BASED ON ROLE ---
-            if (currentUserRole === 'Member') {
-                // Members only see Members, Follow-up, and Announcements
-                document.getElementById('nav-attendance').style.display = 'none'; 
-                document.getElementById('nav-first-timers').style.display = 'none'; 
-                document.getElementById('analytics-section').style.display = 'none'; // Hide all charts
-            } 
-            else if (currentUserRole === 'Leader') {
-                // Leaders see everything EXCEPT attendance and first timer registration
-                document.getElementById('nav-attendance').style.display = 'none'; 
-                document.getElementById('nav-first-timers').style.display = 'none'; 
-                
-                // Show dual charts for leaders
-                document.getElementById('chart-title-1').textContent = 'Entire Church Attendance';
-                document.getElementById('leader-church-chart-container').style.display = 'block';
-                document.getElementById('leader-church-chart-container').querySelector('.section-title').textContent = 'My Members Attendance';
-            } 
-            else if (currentUserRole === 'Secretary') {
-                // Secretaries can take attendance and register, but no charts
-                document.getElementById('analytics-section').style.display = 'none';
-            }
-
-            // --- FETCH DATA ---
+            // Greeting
             const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+            document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const hour = now.getHours();
+            let greeting = hour < 12 ? "Good Morning" : (hour < 18 ? "Good Afternoon" : "Good Evening");
+            document.getElementById('greeting').textContent = `${greeting}, ${currentUserName}`;
 
-            // 1. Members
-            const { data: memberData } = await supabaseClient.from('members').select('*');
-            dashboardData.members = memberData || [];
-            document.getElementById('stat-members').textContent = dashboardData.members.length;
-
-            // 2. Today's Attendance
-            const { data: attData } = await supabaseClient.from('attendance').select('*').eq('service_date', todayStr).eq('status', 'Present');
-            dashboardData.attendance = attData || [];
-            document.getElementById('stat-attendance').textContent = dashboardData.attendance.length;
-            churchTotalToday = dashboardData.attendance.length; // Same for everyone now
-
-            // 3. Visitors
-            const { data: visData } = await supabaseClient.from('first_timers').select('*').gte('created_at', startOfMonth);
-            dashboardData.visitors = visData || [];
-            document.getElementById('stat-visitors').textContent = dashboardData.visitors.length;
-
-            // 4. Followups
-            const { data: folData } = await supabaseClient.from('first_timers').select('*').eq('status', 'Pending');
-            dashboardData.followups = folData || [];
-            document.getElementById('stat-followups').textContent = dashboardData.followups.length;
-
-            // --- CHARTS ---
-            if (currentUserRole !== 'Member' && currentUserRole !== 'Secretary') {
-                // Chart 1: Entire Church
-                const { data: chart1Data } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
-                renderChart('attendanceChart1', chart1Data);
-
-                // Chart 2: Leader's Members (Only for Leaders)
-                if (currentUserRole === 'Leader') {
-                    const { data: chart2Data } = await supabaseClient.from('attendance').select('service_date, status, leader_name').eq('status', 'Present').eq('leader_name', currentUserName).order('service_date');
-                    renderChart('attendanceChart2', chart2Data);
+            // --- ROLE LOGIC ---
+            if (currentUserRole === 'Member') {
+                document.getElementById('admin-view').style.display = 'none';
+                document.getElementById('member-view').style.display = 'block';
+                document.getElementById('sub-greeting').textContent = "Welcome to your personal church dashboard.";
+                
+                // Fetch Member's Leader
+                const { data: myData } = await supabaseClient.from('members').select('assigned_leader').eq('first_name', currentUserName.split(' ')[0]).single();
+                if (myData) {
+                    userLeaderName = myData.assigned_leader;
+                    document.getElementById('my-leader-name').textContent = userLeaderName;
+                } else {
+                    userLeaderName = 'Unassigned';
+                    document.getElementById('my-leader-name').textContent = "Not assigned yet";
                 }
+                
+                fetchDailyVerse();
+            } else {
+                // Admin Views (Pastor, Secretary, Leader)
+                document.getElementById('admin-view').style.display = 'block';
+                document.getElementById('member-view').style.display = 'none';
+                
+                // Role Restrictions
+                if (currentUserRole === 'Leader') {
+                    document.getElementById('nav-attendance').style.display = 'none'; 
+                    document.getElementById('nav-first-timers').style.display = 'none'; 
+                    document.getElementById('chart-title-1').textContent = 'Entire Church Attendance';
+                    document.getElementById('leader-church-chart-container').style.display = 'block';
+                } else if (currentUserRole === 'Secretary') {
+                    document.getElementById('analytics-section').style.display = 'none';
+                }
+                
+                await loadAdminData();
             }
 
-            // Birthdays & Announcements
+            // Universal Data (Birthdays & Latest Announcement)
             const { data: allMembers } = await supabaseClient.from('members').select('first_name, date_of_birth');
-            let birthdayCount = 0; let birthdayNames = [];
+            let bCount = 0; let bNames = [];
             if (allMembers) {
                 const today = new Date(); today.setHours(0,0,0,0);
                 allMembers.forEach(m => {
                     if (m.date_of_birth) {
                         const dob = new Date(m.date_of_birth);
-                        const bdayThisYear = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
-                        if (bdayThisYear < today) bdayThisYear.setFullYear(today.getFullYear() + 1);
-                        const diffDays = Math.ceil(Math.abs(bdayThisYear - today) / (1000 * 60 * 60 * 24));
-                        if (diffDays <= 7) { birthdayCount++; birthdayNames.push(m.first_name); }
+                        const bday = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
+                        if (bday < today) bday.setFullYear(today.getFullYear() + 1);
+                        const diff = Math.ceil(Math.abs(bday - today) / (1000 * 60 * 60 * 24));
+                        if (diff <= 7) { bCount++; bNames.push(m.first_name); }
                     }
                 });
             }
-            document.getElementById('birthday-count').textContent = birthdayCount;
+            document.getElementById('birthday-count').textContent = bCount;
             
             const { data: announcements } = await supabaseClient.from('announcements').select('title').order('created_at', { ascending: false }).limit(1);
             document.getElementById('latest-announcement').textContent = (announcements && announcements.length > 0) ? announcements[0].title : "No announcements yet";
@@ -270,56 +296,117 @@
             document.getElementById('loading').style.display = 'none';
         }
 
+        // --- ADMIN DATA ---
+        async function loadAdminData() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
+
+            const { data: mData } = await supabaseClient.from('members').select('*');
+            dashboardData.members = mData || [];
+            document.getElementById('stat-members').textContent = dashboardData.members.length;
+
+            const { data: aData } = await supabaseClient.from('attendance').select('*').eq('service_date', todayStr).eq('status', 'Present');
+            dashboardData.attendance = aData || [];
+            document.getElementById('stat-attendance').textContent = dashboardData.attendance.length;
+
+            const { data: vData } = await supabaseClient.from('first_timers').select('*').gte('created_at', startOfMonth);
+            dashboardData.visitors = vData || [];
+            document.getElementById('stat-visitors').textContent = dashboardData.visitors.length;
+
+            const { data: fData } = await supabaseClient.from('first_timers').select('*').eq('status', 'Pending');
+            dashboardData.followups = fData || [];
+            document.getElementById('stat-followups').textContent = dashboardData.followups.length;
+
+            if (currentUserRole !== 'Secretary') {
+                const { data: c1Data } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').order('service_date');
+                renderChart('attendanceChart1', c1Data);
+
+                if (currentUserRole === 'Leader') {
+                    const { data: c2Data } = await supabaseClient.from('attendance').select('service_date, status').eq('status', 'Present').eq('leader_name', currentUserName).order('service_date');
+                    renderChart('attendanceChart2', c2Data);
+                }
+            }
+        }
+
         function renderChart(canvasId, data) {
-            const chartLabels = []; const chartCounts = []; const groupedDates = {};
+            const labels = []; const counts = []; const grouped = {};
             if (data) {
-                data.forEach(record => { groupedDates[record.service_date] = (groupedDates[record.service_date] || 0) + 1; });
-                Object.keys(groupedDates).slice(-5).forEach(date => {
-                    chartLabels.push(new Date(date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' }));
-                    chartCounts.push(groupedDates[date]);
+                data.forEach(r => { grouped[r.service_date] = (grouped[r.service_date] || 0) + 1; });
+                Object.keys(grouped).slice(-5).forEach(d => {
+                    labels.push(new Date(d).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' }));
+                    counts.push(grouped[d]);
                 });
             }
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            new Chart(ctx, {
+            new Chart(document.getElementById(canvasId).getContext('2d'), {
                 type: 'line',
-                data: { labels: chartLabels.length ? chartLabels : ['No Data'], datasets: [{ label: 'Attendance', data: chartCounts.length ? chartCounts : [0], borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', borderWidth: 2, fill: true, tension: 0.4, pointBackgroundColor: '#4B0082', pointBorderColor: '#D4AF37' }] },
+                data: { labels: labels.length ? labels : ['No Data'], datasets: [{ data: counts.length ? counts : [0], borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', borderWidth: 2, fill: true, tension: 0.4 }] },
                 options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#999' } }, x: { grid: { display: false }, ticks: { color: '#999' } } } }
             });
         }
 
+        // --- MEMBER MESSAGING ---
+        async function sendMessage(type) {
+            const msgBox = type === 'leader' ? document.getElementById('msg-leader') : document.getElementById('msg-pastor');
+            const text = msgBox.value.trim();
+            if (!text) return alert("Please type a message first.");
+
+            const recipient = type === 'leader' ? userLeaderName : 'Pastor';
+            if (recipient === 'Unassigned' || recipient === 'Not assigned yet') return alert("You don't have a leader assigned yet.");
+
+            msgBox.disabled = true;
+            msgBox.value = "Sending...";
+
+            const { error } = await supabaseClient.from('messages').insert([{
+                sender_name: currentUserName,
+                sender_role: 'Member',
+                recipient: recipient,
+                message: text,
+                status: 'Unread'
+            }]);
+
+            if (error) {
+                alert("Error sending message.");
+                console.error(error);
+            } else {
+                msgBox.value = "";
+                alert(`Message sent to ${recipient} successfully!`);
+            }
+            msgBox.disabled = false;
+        }
+
+        // --- DAILY VERSE (Offline list for now) ---
+        function fetchDailyVerse() {
+            const verses = [
+                { t: "The Lord is my shepherd; I shall not want.", r: "Psalm 23:1" },
+                { t: "I can do all things through Christ who strengthens me.", r: "Philippians 4:13" },
+                { t: "Trust in the Lord with all your heart and lean not on your own understanding.", r: "Proverbs 3:5" },
+                { t: "Be strong and courageous. Do not be afraid; do not be discouraged.", r: "Joshua 1:9" },
+                { t: "For God so loved the world that he gave his one and only Son.", r: "John 3:16" }
+            ];
+            const today = new Date().getDate();
+            const verse = verses[today % verses.length];
+            document.getElementById('verse-text').textContent = `"${verse.t}"`;
+            document.getElementById('verse-ref').textContent = `- ${verse.r}`;
+        }
+
+        // --- UI TOGGLES ---
         window.openStatModal = function(type) {
-            const modal = document.getElementById('statModal');
+            const body = document.getElementById('modalBody'); body.innerHTML = ''; 
             const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
-            body.innerHTML = ''; 
             
-            if (type === 'members') {
-                title.textContent = 'All Members';
-                if (dashboardData.members.length === 0) body.innerHTML = '<p style="color:#999;">No members found.</p>';
-                dashboardData.members.forEach(m => { body.innerHTML += `<div class="name-list-item">${m.first_name} ${m.last_name}</div>`; });
-            } 
-            else if (type === 'attendance') {
-                title.textContent = "Today's Attendance";
-                if (dashboardData.attendance.length === 0) body.innerHTML = '<p style="color:#999;">No attendance recorded for today yet.</p>';
-                dashboardData.attendance.forEach(a => { body.innerHTML += `<div class="name-list-item">${a.member_name}</div>`; });
-            }
-            else if (type === 'visitors') {
-                title.textContent = "First Timers This Month";
-                if (dashboardData.visitors.length === 0) body.innerHTML = '<p style="color:#999;">No first timers this month.</p>';
-                dashboardData.visitors.forEach(v => { body.innerHTML += `<div class="name-list-item">${v.first_name} ${v.last_name}</div>`; });
-            }
-            else if (type === 'followups') {
-                title.textContent = "Pending Follow-ups";
-                if (dashboardData.followups.length === 0) body.innerHTML = '<p style="color:#999;">No pending follow-ups. Good job!</p>';
-                dashboardData.followups.forEach(f => { body.innerHTML += `<div class="name-list-item">${f.first_name} ${f.last_name} <br><span style="font-size:11px; color:#D4AF37;">Phone: ${f.phone || 'N/A'}</span></div>`; });
-            }
-            modal.style.display = 'flex';
+            if (type === 'members') { title.textContent = 'All Members'; dashboardData.members.forEach(m => body.innerHTML += `<div class="name-list-item">${m.first_name} ${m.last_name}</div>`); } 
+            else if (type === 'attendance') { title.textContent = "Today's Attendance"; dashboardData.attendance.forEach(a => body.innerHTML += `<div class="name-list-item">${a.member_name}</div>`); }
+            else if (type === 'visitors') { title.textContent = "First Timers"; dashboardData.visitors.forEach(v => body.innerHTML += `<div class="name-list-item">${v.first_name} ${v.last_name}</div>`); }
+            else if (type === 'followups') { title.textContent = "Pending Follow-ups"; dashboardData.followups.forEach(f => body.innerHTML += `<div class="name-list-item">${f.first_name} ${f.last_name} <br><span style="font-size:11px; color:#D4AF37;">${f.phone || ''}</span></div>`); }
+            
+            if (body.innerHTML === '') body.innerHTML = '<p style="color:#999;">No records found.</p>';
+            document.getElementById('statModal').style.display = 'flex';
         }
 
         window.closeStatModal = function() { document.getElementById('statModal').style.display = 'none'; }
         function toggleUserMenu(event) { event.stopPropagation(); document.getElementById('userDropdown').classList.toggle('active'); }
-        function showNotifications() { const pending = document.getElementById('stat-followups').textContent; if (pending > 0) alert(`You have ${pending} pending follow-ups!`); else alert("No new notifications."); }
-        window.onclick = function(event) { const dropdown = document.getElementById('userDropdown'); if (dropdown && dropdown.classList.contains('active')) dropdown.classList.remove('active'); const modal = document.getElementById('statModal'); if (event.target === modal) modal.style.display = 'none'; }
+        function showNotifications() { alert("Notifications are coming soon!"); }
+        window.onclick = function(event) { const d = document.getElementById('userDropdown'); if (d && d.classList.contains('active')) d.classList.remove('active'); const m = document.getElementById('statModal'); if (event.target === m) m.style.display = 'none'; }
         async function logout() { await supabaseClient.auth.signOut(); window.location.href = 'login.html'; }
 
         loadDashboard();
